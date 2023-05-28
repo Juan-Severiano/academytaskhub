@@ -1,0 +1,24 @@
+user (
+    nome CharField
+    idade IntegerField
+    email-institucional CharField
+    matrícula INtegerField
+)
+
+qualquer coisa da lista(
+    autor CharField
+    titulo CharField
+    conteudo CharField
+    data-public Date
+    data-venc. Date
+    disciplina ForengKey
+    professor ForengKey
+)
+
+disciplina(
+    nome
+)
+
+professor (
+    nome
+)
