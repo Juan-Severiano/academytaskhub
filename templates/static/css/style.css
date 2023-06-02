@@ -1,0 +1,11 @@
+ul li{
+    list-style: none;
+} 
+
+body {
+    background-color: #d3d2d2;
+}
+
+.section {
+    max-height: 80vh;
+}

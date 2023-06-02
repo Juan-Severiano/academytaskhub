@@ -3,23 +3,59 @@
 
 {% block body %}
     <section class="container section text-white d-flex justify-content-between">
-        <main class="to-do p-3 d-flex justify-content-center flex-column bg-dark">
+        <main class="to-do p-3 d-flex justify-content-center flex-column text-dark">
             <h1>to do</h1>
-            <ul>
-                <li>coroi</li>
-            </ul>
+            {% for item in item_list %}
+                    <ul class="card" style="width: 300px;">
+                        <li class="card-body">
+                            <h4 class="card-title">{{ item.title }}</h4>
+                            <p class="card-text">{{ item.content }}</p>
+                            <div class="more d-flex justify-content-between">
+                                <p><i class="bi bi-journal-bookmark"></i> {{ item.discipline }}</p>
+                                <p><i class="bi bi-person-video3"></i> {{ item.teacher }}</p>
+                            </div>
+                            <p class="card-text"><i class="bi bi-calendar-event"></i> {{ item.due_date }}</p>
+                        </li>
+                    </ul>
+            {% empty %}
+                <p>Nenhum item encontrado.</p>
+            {% endfor %}
         </main>
-        <main class="doing p-3 d-flex justify-content-center flex-column bg-dark">
+        <main class="done p-3 d-flex justify-content-center flex-column text-dark">
             <h1>doing</h1>
-            <ul>
-                <li>carai</li>
-            </ul>
+            {% for item in item_today %}
+                    <ul class="card" style="width: 300px;">
+                        <li class="card-body">
+                            <h4 class="card-title">{{ item.title }}</h4>
+                            <p class="card-text">{{ item.content }}</p>
+                            <div class="more d-flex justify-content-between">
+                                <p><i class="bi bi-journal-bookmark"></i> {{ item.discipline }}</p>
+                                <p><i class="bi bi-person-video3"></i> {{ item.teacher }}</p>
+                            </div>
+                            <p class="card-text"><i class="bi bi-calendar-event"></i> {{ item.due_date }}</p>
+                        </li>
+                    </ul>
+            {% empty %}
+                <p>Nenhum item encontrado.</p>
+            {% endfor %}
         </main>
-        <main class="done p-3 d-flex justify-content-center flex-column bg-dark">
+        <main class="done p-3 d-flex justify-content-center flex-column text-dark">
             <h1>done</h1>
-            <ul>
-                <li>carai</li>
-            </ul>
+            {% for item in item_list_past %}
+                    <ul class="card" style="width: 300px;">
+                        <li class="card-body">
+                            <h4 class="card-title">{{ item.title }}</h4>
+                            <p class="card-text">{{ item.content }}</p>
+                            <div class="more d-flex justify-content-between">
+                                <p><i class="bi bi-journal-bookmark"></i> {{ item.discipline }}</p>
+                                <p><i class="bi bi-person-video3"></i> {{ item.teacher }}</p>
+                            </div>
+                            <p class="card-text"><i class="bi bi-calendar-event"></i> {{ item.due_date }}</p>
+                        </li>
+                    </ul>
+            {% empty %}
+                <p>Nenhum item encontrado.</p>
+            {% endfor %}
         </main>
     </section>
 
