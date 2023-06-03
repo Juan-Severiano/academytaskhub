@@ -1,11 +1,17 @@
-<header class="d-flex align-items-center justify-content-between text-white" style="height: 15vh; background-color: #080808;">
-    <h1 class="title" style="padding-left: 20px;">to do list</h1>
-    <nav class="navbar-nav">
-        <ul class="nav">
-            <li class="nav-item p-3"><a href="#" class="nav-link">all</a></li>
-            <li class="nav-item p-3"><a href="#" class="nav-link">to do</a></li>
-            <li class="nav-item p-3"><a href="#" class="nav-link">doing</a></li>
-            <li class="nav-item p-3"><a href="#" class="nav-link">done</a></li>
-        </ul>
+{% load static %}
+<header class="d-flex align-items-center justify-content-between text-white header" style="height: 15vh;">
+    <h1 class="title" style="padding-left: 20px;"><img id="test" src="{% static 'img/2.png' %}" alt=""> Academy Task Hub</h1>
+    <nav class="navbar navbar-expand-lg">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="nav">
+                <li class="nav-item p-3"><a href="#" class="nav-link" style="color: #000;">all</a></li>
+                <li class="nav-item p-3"><a href="#" class="nav-link" style="color: #000;">to do</a></li>
+                <li class="nav-item p-3"><a href="#" class="nav-link" style="color: #000;">doing</a></li>
+                <li class="nav-item p-3"><a href="#" class="nav-link" style="color: #000;">done</a></li>
+            </ul>
+    </div>
     </nav>
 </header>

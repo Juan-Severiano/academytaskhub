@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block body %}
-    <section class="container section text-white d-flex justify-content-between">
+    <section class="container section text-white d-flex justify-content-between align-items-start">
         <main class="to-do p-3 d-flex justify-content-center flex-column text-dark">
             <h1>to do</h1>
             {% for item in item_list %}
@@ -21,7 +21,7 @@
                 <p>Nenhum item encontrado.</p>
             {% endfor %}
         </main>
-        <main class="done p-3 d-flex justify-content-center flex-column text-dark">
+        <main class="doing p-3 d-flex justify-content-center flex-column text-dark">
             <h1>doing</h1>
             {% for item in item_today %}
                     <ul class="card" style="width: 300px;">
