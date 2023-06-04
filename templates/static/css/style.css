@@ -26,3 +26,16 @@ body {
 h1 {
     margin-top: 5px;
 }
+
+header.d-flex {
+    flex-direction: column;
+}
+
+@media (min-width: 375px) and (max-width: 768px) {
+    .container.d-flex{
+        flex-direction: column;
+    }
+    header.d-flex {
+        flex-direction: row;
+    }
+}
