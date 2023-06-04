@@ -21,3 +21,17 @@ def to_do(request):
     return render(request, 'pages/to_do.html', context={
         'item_to_do': item_list,
     })
+
+
+def doing(request):
+    item_list_today = ItemList.objects.filter(due_date=data_atual).order_by('-due_date')
+    return render(request, 'pages/doing.html', context={
+        'item_today': item_list_today,
+    })
+
+
+def done(request):
+    item_list_past = ItemList.objects.filter(due_date__lt=data_atual).order_by('-due_date')
+    return render(request, 'pages/done.html', context={
+        'item_list_past':item_list_past,
+    })
