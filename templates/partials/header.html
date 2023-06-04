@@ -1,6 +1,7 @@
 {% load static %}
 <header class="d-flex align-items-center justify-content-between text-white header" style="min-height: 15vh;" >
-    <h1 class="title" style="padding-left: 20px;"><a href="{% url 'home' %}"><img id="test" src="{% static 'img/2.png' %}" alt=""> Academy Task Hub</a></h1>
+    <h1 class="title" style="padding-left: 20px;"><a href="{% url 'home' %}" style="text-decoration: none; color: white; -webkit-text-stroke: 2px #000;">
+      <img id="test" src="{% static 'img/2.png' %}" alt=""> Academy Task Hub</a></h1>
     <nav class="navbar navbar-expand-lg navbar-light">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon" style="color: #000;"></span>
