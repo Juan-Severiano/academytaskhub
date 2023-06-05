@@ -25,7 +25,8 @@ SECRET_KEY = "django-insecure-2(+!_9=ivs7$u8yo4r#gqu83=v!kb2r@gi9*&#b$x7j)vk$7ap
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['juanseveriano.pythonanywhere.com']
+
 CSRF_TRUSTED_ORIGINS = ['https://juan-severiano-reimagined-space-tribble-45r7g646x9rf7wg6-8000.preview.app.github.dev']
 
 
@@ -118,10 +119,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / 'static'
+STATIC_ROOT = BASE_DIR / 'juanseveriano/academytaskhub/static'
 STATICFILES_DIRS = BASE_DIR / 'templates/static',
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+MEDIA_ROOT = 'home/juanseveriano/academytaskhub/media'
+MEDIA_URL = '/media/'
