@@ -31,6 +31,15 @@ header.d-flex {
     flex-direction: column;
 }
 
+.footer {
+    height: 10vh;
+    justify-content: space-between;
+}
+
+.nav-link {
+    color: #272727!important;
+}
+
 @media (min-width: 375px) and (max-width: 768px) {
     .container.d-flex{
         flex-direction: column;
