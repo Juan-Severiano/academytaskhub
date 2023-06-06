@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import home, to_do, doing, done
+from .views import home, to_do, doing, done, discipline
 
 
 urlpatterns = [
