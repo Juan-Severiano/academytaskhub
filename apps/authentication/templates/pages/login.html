@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+<section class="container section text-white d-flex justify-content-center align-items-start">
+    <main class="done p-3 d-flex justify-content-center flex-column text-dark">
+        <h1>Login</h1>
+        <form action="{% url 'login' %}" method="POST" class="d-flex flex-column gap-2">{% csrf_token %}
+            <input type="email" name="email" placeholder="email">
+            <input type="password" name="password" placeholder="password">
+            <input type="submit">
+        </form>
+    </main>
+</section>
+{% endblock body %}

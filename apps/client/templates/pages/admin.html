@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+<section class="container section text-white d-flex justify-content-center align-items-start">
+    <main class="doing p-3 d-flex justify-content-center flex-column text-dark">
+        <h1>Admin</h1>
+        <form action="{% url 'admin' %}" method="POST" class="d-flex flex-column gap-2">{% csrf_token %}
+          <input type="text" name="title" placeholder="Titulo">
+          <textarea name="content" placeholder="Conteudo" cols="30" rows="10"></textarea>
+          <input type="date" name="due-date" placeholder="Data Vencimento">
+          <select name="discipline">
+            <option value="" selected disabled>Selecione uma disciplina</option>
+            {% for discipline in disciplines %}
+              <option value="{{discipline.id}}">{{discipline.name}}</option>
+            {% endfor %}
+          </select>
+          <select name="teacher">
+            {% for teacher in teachers %}
+            <option value="" selected disabled>Selecione um professor</option>
+              <option value="{{teacher.id}}">{{teacher.name}}</option>
+            {% endfor %}
+          </select>
+          <input type="submit">
+      </form>
+    </main>
+</section>
+{% endblock body %}

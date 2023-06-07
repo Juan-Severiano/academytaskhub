@@ -1,0 +1,15 @@
+<ul class="card" style="min-width: 300px;">
+    <li class="card-body">
+        <h4 class="card-title">{{ item.title }}</h4>
+        <p class="card-text">{{ item.content }}</p>
+        <div class="more d-flex justify-content-between">
+            <p><i class="bi bi-journal-bookmark"></i> {{ item.discipline }}</p>
+            <p><i class="bi bi-person-video3"></i> {{ item.teacher }}</p>
+        </div>
+        <p class="card-text"><i class="bi bi-calendar-event"></i> {{ item.due_date }}</p>
+        <div class="d-flex justify-content-evenly">
+            <a href="{% url 'update_card' item.id person.id %}" class="btn btn-outline-info">Editar</a>
+            <a href="{% url 'delete_card' item.id person.id %}" class="btn btn-danger">Excluir</a>
+        </div>
+    </li>
+</ul>
