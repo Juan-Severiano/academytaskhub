@@ -11,7 +11,7 @@ def home(request):
         if request.user.is_authenticated:
             person = Person.objects.get(user=request.user)
             item_list_todo = person.item_list.filter(status='TODO').order_by('due_date')
-            item_list_doing = person.item_list.filter(due_date=atual_date).filter(status='DOING').order_by('-due_date')
+            item_list_doing = person.item_list.filter(status='DOING').order_by('-due_date')
             item_list_done = person.item_list.filter(status='DONE').order_by('-due_date')
 
             return render(request, 'pages/home.html', context={

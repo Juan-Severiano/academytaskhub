@@ -17,9 +17,9 @@ class Discipline(models.Model):
     
 class ItemList(models.Model):
     STATUS = (
-        ('DOING', 'DOING'),
-        ('DONE', 'DONE'),
-        ('TODO', 'TODO')
+        ('TODO', 'To Do'),
+        ('DOING', 'Doing'),
+        ('DONE', 'Done'),
     )
 
     TYPE = (
@@ -32,7 +32,7 @@ class ItemList(models.Model):
     content = models.CharField(max_length=150)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
-    due_date = models.DateField()
+    due_date = models.DateTimeField()
     discipline = models.ForeignKey(Discipline, on_delete=models.CASCADE, blank=True, null=True)
     teacher = models.ForeignKey(Teacher, models.CASCADE, blank=True, null=True)
     status = models.CharField(max_length=5, choices=STATUS)

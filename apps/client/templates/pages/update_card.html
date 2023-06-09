@@ -5,10 +5,10 @@
 <section class="container section text-white d-flex justify-content-center align-items-start">
     <main class="doing p-3 d-flex justify-content-center flex-column text-dark">
         <h1>Admin</h1>
-        <form action="{% url 'update_card' item.id person.id %}" method="POST" class="d-flex flex-column gap-2">{% csrf_token %}
+        <form action="{% url 'update_card' card.id person.id %}" method="POST" class="d-flex flex-column gap-2">{% csrf_token %}
           <input type="text" name="title" value="{{card.title}}">
           <textarea name="content" placeholder="Conteudo" cols="30" rows="10">{{card.content}}</textarea>
-          <input type="date" name="due-date" placeholder="Data Vencimento" value="{{card.due_date}}">
+          <input type="datetime-local" name="due-date" placeholder="Data Vencimento" value="{{ card.due_date|date:'Y-m-d'}} {{ card.due_date|time:'G:i' }}">
           <select name="discipline">
             <option value="" disabled>Selecione uma disciplina</option>
             {% for discipline in disciplines %}
@@ -19,6 +19,12 @@
             {% for teacher in teachers %}
             <option value="" disabled>Selecione um professor</option>
               <option {% if card.teacher == teacher %} select {% endif %} value="{{teacher.id}}">{{teacher.name}}</option>
+            {% endfor %}
+          </select>
+          <select name="status">
+            <option value="" disabled>Selecione o Estado</option>
+            {% for status, status_show in card.STATUS %}
+              <option {% if status == card.status %} selected {%endif%} value="{{status}}">{{status_show}}</option>
             {% endfor %}
           </select>
           <input type="submit">

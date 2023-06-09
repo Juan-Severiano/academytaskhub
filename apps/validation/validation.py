@@ -53,3 +53,30 @@ def login_is_valid(request: any, email: str, password: str) -> bool:
     if not email_is_valid(request, email, verify_exist=False): return False
     if not password_is_valid(request, password, verify_passwords=False): return False
     return True
+
+def card_id_valid(request: any, title: str, content: str, due_date: str, discipline: object, teacher: object, status: object) -> bool:
+    if len(title.strip()) <= 0:
+        messages.error(request, 'Prencha todos os campos.1')
+        return False
+
+    if len(content.strip()) <= 0:
+        messages.error(request, 'Prencha todos os campos.2')
+        return False
+
+    if len(due_date) <= 0:
+        messages.error(request, 'Prencha todos os campos.3')
+        return False
+
+    if discipline == None:
+        messages.error(request, 'Prencha todos os campos.4')
+        return False
+
+    if teacher == None:
+        messages.error(request, 'Prencha todos os campos.5')
+        return False
+
+    if status == None:
+        messages.error(request, 'Prencha todos os campos.6')
+        return False
+    
+    return True

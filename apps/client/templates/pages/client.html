@@ -4,8 +4,8 @@
 {% block body %}
 <section class="container section text-white d-flex justify-content-center align-items-start">
   <main class="doing p-3 d-flex justify-content-center flex-column text-dark">
-      <h1>Admin</h1>
-      <form action="{% url 'admin' %}" method="POST" class="d-flex flex-column gap-2">{% csrf_token %}
+      <h1>Criar um card</h1>
+      <form action="{% url 'client' person.id %}" method="POST" class="d-flex flex-column gap-2">{% csrf_token %}
         <input type="text" name="title">
         <textarea name="content" placeholder="Conteudo" cols="30" rows="10"></textarea>
         <input type="datetime-local" name="due-date" placeholder="Data Vencimento">

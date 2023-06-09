@@ -22,11 +22,3 @@ disciplina(
 professor (
     nome
 )
-
-
-
-
-
-
-O user fazer a sua
-O user poder trocar o estado
