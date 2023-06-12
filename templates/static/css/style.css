@@ -41,10 +41,10 @@ header.d-flex {
 }
 
 @media (min-width: 375px) and (max-width: 768px) {
-    .container.d-flex{
-        flex-direction: column;
+    .section.container.d-flex{
+        flex-direction: column!important;
     }
     header.d-flex {
-        flex-direction: row;
+        flex-direction: row!important;
     }
 }
