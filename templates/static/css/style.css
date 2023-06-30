@@ -27,8 +27,12 @@ h1 {
     margin-top: 5px;
 }
 
-header.d-flex {
+/* header.d-flex {
     flex-direction: column;
+} */
+
+li.nav-item.dropdown {
+    margin: 0 20px;
 }
 
 .footer {

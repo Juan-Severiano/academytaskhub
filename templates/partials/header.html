@@ -1,26 +1,31 @@
 {% load static %}
-<header class="d-flex align-items-center justify-content-between text-white header" style="min-height: 15vh;" >
+<header class="d-flex align-items-center justify-content-between text-white header" style="min-height: 15vh;">
+  <h1 class="title" style="padding-left: 20px;"><a href="{% url 'home' %}" style="text-decoration: none; color: white; -webkit-text-stroke: 2px #000;">
+    <img id="test" src="{% static 'img/2.png' %}" alt=""> Academy Task Hub</a></h1>
+  <nav class="navbar-nav">
+    <ul class="nav">
+      {% if not user.is_authenticated %}
+        <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Cadastrar</a></li>
+      {% else %}
+        <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-plus-lg"></i></a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="memberDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-square" id="change-mode"></i> {{user.username}}
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="memberDropdown">
+            <li><hr style="height: 1px; color: white;"></li>
+            <li><hr style="height: 1px; color: white;"></li>
+            <li><hr style="height: 1px; color: white;"></li>
+            <li><a class="dropdown-item" href="{% url 'logout' %}" style="color: red;">Sair</a></li>
+          </ul>
+      {% endif %}
+      </li>
+    </ul>
+  </nav>
+</header>
+{% comment %} <header class="d-flex align-items-center justify-content-between text-white header" style="min-height: 15vh;" >
     <h1 class="title" style="padding-left: 20px;"><a href="{% url 'home' %}" style="text-decoration: none; color: white; -webkit-text-stroke: 2px #000;">
       <img id="test" src="{% static 'img/2.png' %}" alt=""> Academy Task Hub</a></h1>
-    <nav class="navbar navbar-expand-lg navbar-light">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon" style="color: #000;"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav">
-            <li class="nav-item active">
-              <a class="nav-link" href="{% url 'home' %}">all</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'to_do' %}">to do</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'doing' %}">doing</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'done' %}">done</a>
-            </li>
-          </ul>
-        </div>
-    </nav>
-</header>
+    {% include './nav.html' %}
+</header> {% endcomment %}
