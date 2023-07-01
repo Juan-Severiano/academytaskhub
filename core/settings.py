@@ -25,9 +25,9 @@ SECRET_KEY = "django-insecure-2(+!_9=ivs7$u8yo4r#gqu83=v!kb2r@gi9*&#b$x7j)vk$7ap
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['juanseveriano.pythonanywhere.com', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
-CSRF_TRUSTED_ORIGINS = ['https://juan-severiano-reimagined-space-tribble-45r7g646x9rf7wg6-8000.preview.app.github.dev']
+CSRF_TRUSTED_ORIGINS = ['https://juan-severiano-bookish-succotash-5j9q4569vr72794r-8000.preview.app.github.dev']
 
 
 # Application definition

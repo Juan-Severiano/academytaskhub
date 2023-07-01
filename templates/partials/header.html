@@ -11,7 +11,7 @@
         <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-plus-lg"></i></a></li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="memberDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-person-square" id="change-mode"></i> {{user.username}}
+            <i class="bi bi-person-circle" id="change-mode"></i> {{user.username}}
           </a>
           <ul class="dropdown-menu" aria-labelledby="memberDropdown">
             <li><hr style="height: 1px; color: white;"></li>
@@ -24,8 +24,4 @@
     </ul>
   </nav>
 </header>
-{% comment %} <header class="d-flex align-items-center justify-content-between text-white header" style="min-height: 15vh;" >
-    <h1 class="title" style="padding-left: 20px;"><a href="{% url 'home' %}" style="text-decoration: none; color: white; -webkit-text-stroke: 2px #000;">
-      <img id="test" src="{% static 'img/2.png' %}" alt=""> Academy Task Hub</a></h1>
-    {% include './nav.html' %}
-</header> {% endcomment %}
+
