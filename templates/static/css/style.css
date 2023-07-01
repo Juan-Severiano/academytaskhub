@@ -39,6 +39,11 @@ li.nav-item.dropdown {
     margin: 0 20px;
 }
 
+textarea {
+    width: 500px;
+    height: 100px;
+}
+
 .footer {
     height: 10vh;
     justify-content: space-between;
@@ -49,13 +54,16 @@ li.nav-item.dropdown {
 }
 
 @media (min-width: 300px) and (max-width: 800px) {
+    textarea {
+        max-width: 320px;
+    }
     h1.title span{
         display: none;
     }
     .section.container.d-flex{
         flex-direction: column!important;
     }
-    .bi-plus-lg {
+    #asd {
         display: none!important;
     }
     .footer {
