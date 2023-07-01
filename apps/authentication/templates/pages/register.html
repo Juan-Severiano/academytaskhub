@@ -4,13 +4,36 @@
 {% block body %}
 <section class="container section text-white d-flex justify-content-center align-items-start">
     <main class="done p-3 d-flex justify-content-center flex-column text-dark">
-        <h1>Register</h1>
-        <form action="{% url 'register' %}" method="POST" class="d-flex flex-column gap-2">{% csrf_token %}
-            <input type="text" name="username" placeholder="username">
-            <input type="email" name="email" placeholder="email">
-            <input type="password" name="password" placeholder="password">
-            <input type="password" name="confirm-password" placeholder="confirm-password">
-            <input type="submit">
+        <h1>Cadastrar</h1>
+        <form action="{% url 'register' %}" method="POST" class="d-flex flex-column gap-2 valid-form">{% csrf_token %}
+            <div class="form-floating mb-3">
+                <input type="text"  class="form-control" name="username" id="username" placeholder="username">
+                <label for="username">Nome de Usuário</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" name="email" id="email" placeholder="ex. youremail@aluno.ce.gov.br">
+                <label for="email">Email Institucional</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="password" class="form-control" name="password" id="password" placeholder="type your password here">
+                <label for="password">Senha</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="password" name="confirm-password" id="repeat-password" placeholder="confirm your password" class="form-control">
+                <label for="repeat-password">Confirmar Senha</label>
+            </div>
+            <div class="form-group check-pass d-none" style="font-size: 12px;" align="center">
+                <p>A senha deve conter:</p>
+                <ul id="password-check-list" class="">
+                  <li class="text-danger">Pelo menos uma letra maiuscula ex.(A, B, C) <i class="bi bi-check-all"></i></li>
+                  <li class="text-danger">Pelo menos uma letra minúscula ex.(a, b, c) <i class="bi bi-check-all"></i></li>
+                  <li class="text-danger">Pelo menos um número <i class="bi bi-check-all"></i></li>
+                  <li class="text-danger">No mínimo 6 caracteres <i class="bi bi-check-all"></i></li>
+                  <li class="text-danger">As duas senhas devem ser idênticas <i class="bi bi-check-all"></i></li>
+                </ul>
+              </div>
+          
+            <button type="submit" class="btn btn-primary mt-5" >Cadastrar <i class="bi bi-send"></i></button>
         </form>
     </main>
 </section>

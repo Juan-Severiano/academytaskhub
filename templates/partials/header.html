@@ -5,8 +5,8 @@
   <nav class="navbar-nav">
     <ul class="nav">
       {% if not user.is_authenticated %}
-        <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Cadastrar</a></li>
+        <li class="nav-item p-3"><a class="nav-link" href="{% url 'login' %}">Login <i class="bi bi-box-arrow-in-right"></i></a></li>
+        <li class="nav-item p-3"><a class="nav-link" href="{% url 'register' %}">Cadastrar <i class="bi bi-person-add"></i></a></li>
       {% else %}
         <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-plus-lg"></i></a></li>
         <li class="nav-item dropdown">
@@ -17,7 +17,7 @@
             <li><hr style="height: 1px; color: white;"></li>
             <li><hr style="height: 1px; color: white;"></li>
             <li><hr style="height: 1px; color: white;"></li>
-            <li><a class="dropdown-item" href="{% url 'logout' %}" style="color: red;">Sair</a></li>
+            <li><a class="dropdown-item" href="{% url 'logout' %}" style="color: red;"><i class="bi bi-box-arrow-in-left"></i>  Sair </a></li>
           </ul>
       {% endif %}
       </li>
