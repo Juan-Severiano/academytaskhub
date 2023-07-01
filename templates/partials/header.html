@@ -1,24 +1,25 @@
 {% load static %}
 <header class="d-flex align-items-center justify-content-between text-white header" style="min-height: 15vh;">
   <h1 class="title" style="padding-left: 20px;"><a href="{% url 'home' %}" style="text-decoration: none; color: white; -webkit-text-stroke: 2px #000;">
-    <img id="test" src="{% static 'img/2.png' %}" alt=""> Academy Task Hub {{ user.id }}</a></h1>
+    <img id="test" src="{% static 'img/2.png' %}" alt=""> Academy Task Hub {{ person.id }} </a></h1>
   <nav class="navbar-nav">
     <ul class="nav">
       {% if not user.is_authenticated %}
         <li class="nav-item p-3"><a class="nav-link" href="{% url 'login' %}">Login <i class="bi bi-box-arrow-in-right"></i></a></li>
         <li class="nav-item p-3"><a class="nav-link" href="{% url 'register' %}">Cadastrar <i class="bi bi-person-add"></i></a></li>
       {% else %}
-        <li class="nav-item"><a class="nav-link" href="{% url 'client' person.id %}"><i class="bi bi-plus-lg"></i></a></li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="memberDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-person-circle" id="change-mode"></i> {{user.username}}
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="memberDropdown">
-            <li><hr style="height: 1px; color: white;"></li>
-            <li><hr style="height: 1px; color: white;"></li>
-            <li><hr style="height: 1px; color: white;"></li>
-            <li><a class="dropdown-item" href="{% url 'logout' %}" style="color: red;"><i class="bi bi-box-arrow-in-left"></i>  Sair </a></li>
-          </ul>
+          <li class="nav-item"><a class="nav-link" href="{% url 'client' 6 %}" method="GET"> 
+            <i class="bi bi-plus-lg"></i></a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="memberDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person-circle" id="change-mode"></i> {{ user.username }} {{ user.id }}
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="memberDropdown">
+              <li><hr style="height: 1px; color: white;"></li>
+              <li><hr style="height: 1px; color: white;"></li>
+              <li><hr style="height: 1px; color: white;"></li>
+              <li><a class="dropdown-item text-danger" href="{% url 'logout' %}"><i class="bi bi-box-arrow-in-left"></i>  Sair </a></li>
+            </ul>
       {% endif %}
       </li>
     </ul>

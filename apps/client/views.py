@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect
 from django.contrib import messages
 from apps.client.models import Person, Discipline, Teacher, ItemList
 from django.contrib.auth.decorators import login_required
