@@ -8,7 +8,7 @@
         <li class="nav-item p-3"><a class="nav-link" href="{% url 'login' %}">Login <i class="bi bi-box-arrow-in-right"></i></a></li>
         <li class="nav-item p-3"><a class="nav-link" href="{% url 'register' %}">Cadastrar <i class="bi bi-person-add"></i></a></li>
       {% else %}
-        <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-plus-lg"></i></a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'client' user.id %}"><i class="bi bi-plus-lg"></i></a></li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="memberDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="bi bi-person-circle" id="change-mode"></i> {{user.username}}
