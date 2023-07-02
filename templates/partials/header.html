@@ -18,7 +18,7 @@
               <li class="nav-item dropdown">
         {% endif %}
             <a class="nav-link dropdown-toggle" href="#" id="memberDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="bi bi-person-circle" id="change-mode"></i> {{ user.username }} {{ user.id }}
+              <i class="bi bi-person-circle" id="change-mode"></i> {{ user.username }}
             </a>
             <ul class="dropdown-menu" aria-labelledby="memberDropdown" style="font-size: 13px;">
                 <li class="nav-item" align="center"><a class="nav-link" href="{% url 'client' person.id %}"><i class="bi bi-plus-lg"></i> Adicionar Tarefa</a></li>

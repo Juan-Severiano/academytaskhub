@@ -22,6 +22,7 @@ def admin(request):
         return render(request, 'pages/admin.html', context={
             'disciplines': disciplines, 'teachers': teachers, 
             'status': status, 'person': person})
+    
     elif request.method == 'POST':
         title = request.POST.get('title')
         content = request.POST.get('content')
