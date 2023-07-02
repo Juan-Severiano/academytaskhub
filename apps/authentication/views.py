@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.auth.models import User
-from apps.client.models import Person
+from apps.client.models import Person, ItemList
 from django.contrib import messages
 from apps.validation import validation
 from django.contrib import auth
@@ -23,15 +23,34 @@ def register(request):
             return redirect('/auth/register')
 
         try:
-            user = User.objects.create_user(username=username, email=email, password=password)
+            user = User.objects.create_user(
+                    username=username,
+                    email=email,
+                    password=password)
             user.save()
             person = Person.objects.create(user=user, level='AL')
             person.save()
+
+            item_list_todo = ItemList.objects.filter(type='A').filter(
+                    status='TODO').order_by('due_date')
+            item_list_doing = ItemList.objects.filter(type='A').filter(
+                    status='DOING').order_by('-due_date')
+            item_list_done = ItemList.objects.filter(type='A').filter(
+                    status='DONE').order_by('-due_date')
+
+            for item in item_list_todo:
+                person.item_list.add(item)
+            for item in item_list_doing:
+                person.item_list.add(item)
+            for item in item_list_done:
+                person.item_list.add(item)
+
             messages.success(request, 'Registro realizado com sucesso.')
             return redirect('/auth/login')
         except:
             messages.erro(request, 'Erro interno no sistema.')
             return redirect('/auth/register')
+
 
 def login(request):
     if request.method == 'GET':
@@ -59,6 +78,7 @@ def login(request):
         except:
             messages.error(request, 'Erro interno do sistema.')
             return redirect('/auth/login')
+
 
 @login_required(login_url='/auth/login')
 def logout(request):

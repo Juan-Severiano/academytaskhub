@@ -13,16 +13,16 @@ def admin(request):
     if not person.level == 'AD':
         messages.error(request, 'Você não tem permissão de acessar está página.')
         return redirect('/')
-    
+
     if request.method == 'GET':       
         disciplines = Discipline.objects.all()
         teachers = Teacher.objects.all()
-        status = ItemList.objects.first().STATUS
+        status = ItemList.STATUS
 
         return render(request, 'pages/admin.html', context={
-            'disciplines': disciplines, 'teachers': teachers, 
+            'disciplines': disciplines, 'teachers': teachers,
             'status': status, 'person': person})
-    
+
     elif request.method == 'POST':
         title = request.POST.get('title')
         content = request.POST.get('content')
@@ -35,18 +35,20 @@ def admin(request):
             discipline = Discipline.objects.filter(id=discipline_id).first()
             teacher = Teacher.objects.filter(id=teacher_id).first()
             
-            if not validation.card_id_valid(request, title, content, due_date, discipline, teacher, status):
+            if not validation.card_id_valid(
+                    request, title, content, due_date,
+                    discipline, teacher, status):
                 return redirect('/client/admin/')
             
             item_list = ItemList.objects.create(
-                author = request.user,
-                title = title,
-                content = content,
-                due_date = due_date,
-                discipline = discipline,
-                teacher = teacher,
-                status = status,
-                type = 'A'
+                author=request.user,
+                title=title,
+                content=content,
+                due_date=due_date,
+                discipline=discipline,
+                teacher=teacher,
+                status=status,
+                type='A'
             )
             item_list.save()
             messages.success(request, 'Card criado com sucesso.')
@@ -58,7 +60,8 @@ def admin(request):
         except:
             messages.error(request, 'Erro interno do sistema.')
             return redirect('/client/admin')
-        
+
+
 @login_required(login_url='/auth/login/')
 def client(request, pk):
     person = Person.objects.filter(id=pk).first()
@@ -71,9 +74,15 @@ def client(request, pk):
     if request.method == 'GET':       
         disciplines = Discipline.objects.all()
         teachers = Teacher.objects.all()
-        status = ItemList.objects.first().STATUS
+        status = ItemList.STATUS
 
-        return render(request, 'pages/client.html', context={'person':person, 'disciplines': disciplines, 'teachers': teachers, 'status':status})
+        return render(request, 'pages/client.html',
+                      context={
+                          'person': person,
+                          'disciplines': disciplines,
+                          'teachers': teachers,
+                          'status': status})
+
     elif request.method == 'POST':
         title = request.POST.get('title')
         content = request.POST.get('content')
@@ -85,19 +94,22 @@ def client(request, pk):
         try:
             discipline = Discipline.objects.filter(id=discipline_id).first()
             teacher = Teacher.objects.filter(id=teacher_id).first()
-            
-            if not validation.card_id_valid(request, title, content, due_date, discipline, teacher, status):
+
+            if not validation.card_id_valid(
+                    request, title,
+                    content, due_date,
+                    discipline, teacher, status):
                 return redirect(f'/client/{person.id}/')
-            
+
             item_list = ItemList.objects.create(
-                author = request.user,
-                title = title,
-                content = content,
-                due_date = due_date,
-                discipline = discipline,
-                teacher = teacher,
-                status = status,
-                type = 'P'
+                author=request.user,
+                title=title,
+                content=content,
+                due_date=due_date,
+                discipline=discipline,
+                teacher=teacher,
+                status=status,
+                type='P'
             )
             item_list.save()
             person.item_list.add(item_list)
@@ -107,7 +119,7 @@ def client(request, pk):
             messages.error(request, 'Erro interno do sistema.')
             return redirect('/client/admin')
 
-        
+
 def add_card_person(item_list):
     people = Person.objects.filter(level='AL')
     people = people.union(Person.objects.filter(level='AD'))

@@ -45,7 +45,6 @@ def to_do(request):
         return render(request, 'pages/to_do.html', context={'item_list_todo': item_list_todo})
 
 
-
 def doing(request):
     atual_date = datetime.today().strftime("%Y-%m-%d")
     if request.method == 'GET':
