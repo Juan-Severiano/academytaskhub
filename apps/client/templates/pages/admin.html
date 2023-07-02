@@ -7,7 +7,7 @@
     <h1>Admin</h1>
     <form action="{% url 'admin' %}" method="POST" class="d-flex flex-column gap-2">{% csrf_token %}
       <div class="form-floating">
-        <input type="text" class="form-control" name="Title" id="title" placeholder="ex. youremail@aluno.ce.gov.br">
+        <input type="text" class="form-control" name="title" id="title" placeholder="ex. youremail@aluno.ce.gov.br">
         <label for="title">Titulo da Tarefa</label>
       </div>
       <textarea name="content" placeholder="Conteudo da Tarefa" class="p-2"></textarea>
@@ -22,15 +22,15 @@
         {% endfor %}
       </select>
       <select name="teacher" class="form-select" aria-label=".form-select">
-        {% for teacher in teachers %}
         <option value="" disabled selected>Selecione um professor</option>
-        <option value="{{teacher.id}}">{{teacher.name}}</option>
+        {% for teacher in teachers %}
+          <option value="{{teacher.id}}">{{teacher.name}}</option>
         {% endfor %}
       </select>
       <select name="status" class="form-select" aria-label=".form-select">
         <option value="" disabled selected>Selecione o Estado</option>
         {% for status_value, status_show in status %}
-        <option value="{{status_value}}">{{status_show}}</option>
+          <option value="{{status_value}}">{{status_show}}</option>
         {% endfor %}
       </select>
       <button type="submit" class="btn btn-primary"> Enviar <i class="bi bi-send"></i></button>

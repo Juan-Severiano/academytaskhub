@@ -19,6 +19,7 @@ def home(request):
                 'item_list_todo': item_list_todo,
                 'item_list_done': item_list_done,
                 'item_list_doing': item_list_doing,
+                'person': person,
             })
 
         item_list_todo = ItemList.objects.filter(type='A').filter(status='TODO').order_by('due_date')
@@ -42,7 +43,6 @@ def to_do(request):
 
         item_list_todo = ItemList.objects.filter(type='A').filter(status='TODO').order_by('due_date')
         return render(request, 'pages/to_do.html', context={'item_list_todo': item_list_todo})
-
 
 
 def doing(request):

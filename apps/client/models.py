@@ -5,8 +5,9 @@ from django.contrib.auth.models import User
 class Teacher(models.Model):
     name = models.CharField(max_length=20)
 
-    def __str__ (self) -> str:
+    def __str__(self) -> str:
         return self.name
+
 
 class Discipline(models.Model):
     name = models.CharField(max_length=20)
@@ -14,7 +15,8 @@ class Discipline(models.Model):
 
     def __str__ (self) -> str:
         return self.name
-    
+
+
 class ItemList(models.Model):
     STATUS = (
         ('TODO', 'To Do'),
@@ -40,7 +42,8 @@ class ItemList(models.Model):
 
     def __str__(self) -> str:
         return self.title
-    
+
+
 class Person(models.Model):
     LEVEL = (
         ('AD', 'Admin'),

@@ -5,9 +5,8 @@ ul li{
 body {
     background-color: #e6e6e6;
 }
-
 .section {
-    min-height: 80vh;
+    min-height: 70vh;
 }
 
 * {
@@ -29,6 +28,7 @@ h1 {
 
 .card {
     border-radius: 20px!important;
+    width: 350px!important;
 }
 
 /* header.d-flex {
@@ -53,15 +53,31 @@ textarea {
     color: #272727!important;
 }
 
+.bi:hover {
+    cursor: pointer;
+}
+
+.bi-brightness-high {
+    color: #ffde59;
+    font-size: 20px;
+}
+
+.bi-moon-stars{
+    color: #666666;
+    font-size: 20px;
+}
+
 @media (min-width: 300px) and (max-width: 800px) {
     textarea {
-        max-width: 320px;
+        max-width: 340px;
     }
     h1.title span{
         display: none;
     }
     .section.container.d-flex{
         flex-direction: column!important;
+        justify-content: center!important;
+        align-items: center!important;
     }
     #asd {
         display: none!important;
