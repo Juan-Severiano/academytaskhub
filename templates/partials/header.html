@@ -9,20 +9,22 @@
         <li class="nav-item p-3"><a class="nav-link" href="{% url 'register' %}">Cadastrar <i class="bi bi-person-add"></i></a></li>
       {% else %}
         {% if person.level == "AL" %}
-            <li class="nav-item"><a class="nav-link" href="{% url 'client' 6 %}">
+            <li class="nav-item"><a class="nav-link" href="{% url 'client' person.id %}">
               <i class="bi bi-plus-lg" id="asd"></i></a></li>
             <li class="nav-item dropdown">
         {% elif person.level == "AD" %}
-              <li class="nav-item"><a class="nav-link" href="{% url 'admin' %}">
+              <li class="nav-item"><a class="nav-link" href="{% url 'client' person.id %}">
                 <i class="bi bi-plus-lg" id="asd"></i></a></li>
               <li class="nav-item dropdown">
-        {%endif%}
+        {% endif %}
             <a class="nav-link dropdown-toggle" href="#" id="memberDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="bi bi-person-circle" id="change-mode"></i> {{ user.username }} {{ user.id }}
             </a>
             <ul class="dropdown-menu" aria-labelledby="memberDropdown" style="font-size: 13px;">
-              <li class="nav-item" align="center"><a class="nav-link" href="{% url 'client' 6 %}" method="GET"> 
-                <i class="bi bi-plus-lg"></i> Adicionar Tarefa</a></li>
+                <li class="nav-item" align="center"><a class="nav-link" href="{% url 'client' person.id %}"><i class="bi bi-plus-lg"></i> Adicionar Tarefa</a></li>
+              {% if person.level == "AD" %}
+                <li class="nav-item" align="center"><a class="nav-link" href="{% url 'admin' %}"><i class="bi bi-plus-lg"></i> Adicionar Tarefa (Admin)</a></li>
+              {% endif %}
               <li><hr style="height: 1px; color: #888888;"></li>
               <li><hr style="height: 1px; color: #888;"></li>
               <li><a class="dropdown-item text-danger" href="{% url 'logout' %}"><i class="bi bi-box-arrow-in-left"></i>  Sair </a></li>

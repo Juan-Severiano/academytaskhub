@@ -19,7 +19,9 @@ def admin(request):
         teachers = Teacher.objects.all()
         status = ItemList.objects.first().STATUS
 
-        return render(request, 'pages/admin.html', context={'disciplines': disciplines, 'teachers': teachers, 'status':status})
+        return render(request, 'pages/admin.html', context={
+            'disciplines': disciplines, 'teachers': teachers, 
+            'status': status, 'person': person})
     elif request.method == 'POST':
         title = request.POST.get('title')
         content = request.POST.get('content')
@@ -60,11 +62,11 @@ def admin(request):
 def client(request, pk):
     person = Person.objects.filter(id=pk).first()
     user = Person.objects.filter(user=request.user).first()
-    
+
     if not person.id == user.id:
         messages.error(request, 'Você não tem permissão de acessar está página.')
         return redirect('/')
-    
+
     if request.method == 'GET':       
         disciplines = Discipline.objects.all()
         teachers = Teacher.objects.all()
@@ -111,6 +113,7 @@ def add_card_person(item_list):
     for person in people:
         person.item_list.add(item_list)
 
+
 @login_required(login_url='/auth/login')
 def cards(request, pk):
     if request.method == 'GET':
@@ -120,7 +123,7 @@ def cards(request, pk):
         if not user.id == person.id:
             messages.error(request, 'Você não tem permisão de acessar está página.')
             return redirect('/')
-        
+
         person = Person.objects.get(user=request.user)
         atual_date = datetime.today().strftime("%Y-%m-%d")
         item_list_todo = person.item_list.filter(status='TODO').order_by('due_date')
@@ -135,6 +138,7 @@ def cards(request, pk):
             'person': person,
         })
 
+
 @login_required(login_url='/auth/login')
 def delete_card(request, pk_card, pk_person):
     if request.method == 'GET':
@@ -143,18 +147,19 @@ def delete_card(request, pk_card, pk_person):
         if not user.id == person.id:
             messages.error(request, 'Você não tem permissão.')
             return  redirect('/')
-        
+
         card = ItemList.objects.filter(id=pk_card).first()
         card.delete()
         messages.success(request, 'Card deletado com sucesso.')
         return redirect(f'/client/cards/{person.id}')
     
+
 @login_required(login_url='/auth/login')
 def update_card(request, pk_card, pk_person):
     person = Person.objects.filter(id=pk_person).first()
     user = Person.objects.filter(user=request.user).first()
     card = ItemList.objects.filter(id=pk_card).first()
-    
+
     if not user.id == person.id:
         messages.error(request, 'Você não tem permissão.')
         return  redirect('/')
@@ -169,7 +174,7 @@ def update_card(request, pk_card, pk_person):
             'disciplines': disciplines,
             'teachers': teachers,
         })
-    
+
     elif request.method == 'POST':
         title = request.POST.get('title')
         content = request.POST.get('content')

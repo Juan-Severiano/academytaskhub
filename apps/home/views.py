@@ -19,6 +19,7 @@ def home(request):
                 'item_list_todo': item_list_todo,
                 'item_list_done': item_list_done,
                 'item_list_doing': item_list_doing,
+                'person': person,
             })
 
         item_list_todo = ItemList.objects.filter(type='A').filter(status='TODO').order_by('due_date')
