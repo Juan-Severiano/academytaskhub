@@ -3,7 +3,7 @@
   <h1 class="title" style="padding-left: 20px;"><a href="{% url 'home' %}" style="text-decoration: none;">
     <img id="test" src="{% static 'img/2.png' %}" alt=""> <span style="text-decoration: none; color: white; -webkit-text-stroke: 2px #000;">Academy Task Hub</span> </a></h1>
   <nav class="navbar-nav">
-    <ul class="nav">
+    <ul class="nav align-items-center">
       {% if not user.is_authenticated %}
         <li class="nav-item p-3"><a class="nav-link" href="{% url 'login' %}">Login <i class="bi bi-box-arrow-in-right"></i></a></li>
         <li class="nav-item p-3"><a class="nav-link" href="{% url 'register' %}">Cadastrar <i class="bi bi-person-add"></i></a></li>
