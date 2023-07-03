@@ -49,7 +49,9 @@ def to_do(request):
                 status='TODO').order_by('due_date')
 
             return render(request, 'pages/to_do.html',
-                          context={'item_list_todo': item_list_todo})
+                          context={
+                            'item_list_todo': item_list_todo,
+                            'person': person})
 
         item_list_todo = ItemList.objects.filter(
             type='A', status='TODO', root=True).order_by('due_date')
@@ -67,7 +69,8 @@ def doing(request):
                 status='DOING').order_by('-due_date')
 
             return render(request, 'pages/doing.html',
-                          context={'item_list_doing': item_list_doing})
+                          context={'item_list_doing': item_list_doing,
+                                   'person': person})
 
         item_list_doing = ItemList.objects.filter(
             type='A', status='DOING', root=True).order_by('-due_date')
@@ -85,7 +88,8 @@ def done(request):
                 status='DONE').order_by('-due_date')
 
             return render(request, 'pages/done.html',
-                          context={'item_list_done': item_list_done})
+                          context={'item_list_done': item_list_done,
+                                   'person': person})
 
         item_list_done = ItemList.objects.filter(
             type='A', status='DONE', root=True).order_by('-due_date')
@@ -95,4 +99,4 @@ def done(request):
 
 
 def terms(request):
-    return(request, 'pages/terms.html')
+    return render(request, 'pages/terms.html')
