@@ -92,3 +92,7 @@ def done(request):
 
         return render(request, 'pages/done.html',
                       context={'item_list_done': item_list_done})
+
+
+def terms(request):
+    return(request, 'pages/terms.html')

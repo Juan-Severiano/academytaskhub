@@ -1,6 +1,14 @@
 <ul class="card" style="min-width: 300px;">
     <li class="card-body">
-        <h4 class="card-title">{{ item.title }}</h4>
+        <h4 class="card-title">
+            {{ item.title }}  
+
+            {% if item.type == "P" %}
+                <i class="bi bi-circle-fill" style="color: #3facac;"></i>
+            {% elif item.type == "A" %}
+                <i class="bi bi-circle-fill" style="color: #ffde59;"></i>
+            {% endif %}
+        </h4>
         <p class="card-text">{{ item.content }}</p>
         <div class="more d-flex justify-content-between">
             <p><i class="bi bi-journal-bookmark"></i> {{ item.discipline }}</p>
