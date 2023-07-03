@@ -24,14 +24,15 @@
             </a>
             <ul class="dropdown-menu" aria-labelledby="memberDropdown" style="font-size: 13px;">
                 <li class="nav-item" align="center"><a class="nav-link" href="{% url 'client' person.id %}"><i class="bi bi-plus-lg"></i> Adicionar Tarefa</a></li>
-              {% if person.level == "AD" %}
+                {% if person.level == "AD" %}
                 <li class="nav-item" align="center"><a class="nav-link" href="{% url 'admin' %}"><i class="bi bi-plus-lg"></i> Adicionar Tarefa (Admin)</a></li>
-              {% endif %}
-              <li class="nav-item" align="center"><a class="nav-link dropdown-item" href="{% url 'to_do' %}">TO DO</a></li>
-              <li class="nav-item" align="center"><a class="nav-link dropdown-item" href="{% url 'doing' %}">DONE</a></li>
-              <li class="nav-item" align="center"><a class="nav-link dropdown-item" href="{% url 'done' %}">DONE</a></li>
-              <li><hr style="height: 1px; color: #888;"></li>
-              <li><a class="dropdown-item text-danger" href="{% url 'logout' %}"><i class="bi bi-box-arrow-in-left"></i>  Sair </a></li>
+                {% endif %}
+                <li class="nav-item" align="center"><a class="nav-link dropdown-item" href="{% url 'cards' person.id %}">Minhas tarefas</a></li>
+                <li class="nav-item" align="center"><a class="nav-link dropdown-item" href="{% url 'to_do' %}">TO DO</a></li>
+                <li class="nav-item" align="center"><a class="nav-link dropdown-item" href="{% url 'doing' %}">DOING</a></li>
+                <li class="nav-item" align="center"><a class="nav-link dropdown-item" href="{% url 'done' %}">DONE</a></li>
+                <li><hr style="height: 1px; color: #888;"></li>
+                <li><a class="dropdown-item text-danger" href="{% url 'logout' %}"><i class="bi bi-box-arrow-in-left"></i>  Sair </a></li>
             </ul>
       {% endif %}
       </li>
