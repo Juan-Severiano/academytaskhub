@@ -40,6 +40,10 @@ header.d-flex {
     color: #272727!important;
 }
 
+.card {
+    max-width: 200px!important;
+}
+
 @media (min-width: 375px) and (max-width: 768px) {
     .container.d-flex{
         flex-direction: column;

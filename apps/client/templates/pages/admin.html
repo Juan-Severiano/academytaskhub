@@ -22,15 +22,15 @@
         {% endfor %}
       </select>
       <select name="teacher" class="form-select" aria-label=".form-select">
-        {% for teacher in teachers %}
         <option value="" disabled selected>Selecione um professor</option>
-        <option value="{{teacher.id}}">{{teacher.name}}</option>
+        {% for teacher in teachers %}
+          <option value="{{teacher.id}}">{{teacher.name}}</option>
         {% endfor %}
       </select>
       <select name="status" class="form-select" aria-label=".form-select">
         <option value="" disabled selected>Selecione o Estado</option>
         {% for status_value, status_show in status %}
-        <option value="{{status_value}}">{{status_show}}</option>
+          <option value="{{status_value}}">{{status_show}}</option>
         {% endfor %}
       </select>
       <button type="submit" class="btn btn-primary"> Enviar <i class="bi bi-send"></i></button>
