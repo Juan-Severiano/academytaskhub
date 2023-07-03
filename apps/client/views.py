@@ -52,7 +52,7 @@ def admin(request):
 
 
 @login_required(login_url='/auth/login/')
-def client(request, pk):
+def client(request , pk):
     person = Person.objects.filter(id=pk).first()
     user = Person.objects.filter(user=request.user).first()
 
