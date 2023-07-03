@@ -31,25 +31,47 @@ def register(request):
             person = Person.objects.create(user=user, level='AL')
             person.save()
 
-            item_list_todo = ItemList.objects.filter(type='A').filter(
-                    status='TODO').order_by('due_date')
-            item_list_doing = ItemList.objects.filter(type='A').filter(
-                    status='DOING').order_by('-due_date')
-            item_list_done = ItemList.objects.filter(type='A').filter(
-                    status='DONE').order_by('-due_date')
+            item_list_todo = ItemList.objects.filter(
+                type='A', status='TODO', root=True)
+            item_list_doing = ItemList.objects.filter(
+                type='A', status='DOING', root=True)
+            item_list_done = ItemList.objects.filter(
+                type='A', status='DONE', root=True)
 
-            for item in item_list_todo:
-                person.item_list.add(item)
-            for item in item_list_doing:
-                person.item_list.add(item)
-            for item in item_list_done:
-                person.item_list.add(item)
+            for item_todo in item_list_todo:
+                item_copy = copy_card(item_todo)
+                person.item_list.add(item_copy)
+            item_copy = None
+
+            for item_doing in item_list_doing:
+                item_copy = copy_card(item_doing)
+                person.item_list.add(item_copy)
+            item_copy = None
+
+            for item_done in item_list_done:
+                item_copy = copy_card(item_done)
+                person.item_list.add(item_copy)
+            item_copy = None
 
             messages.success(request, 'Registro realizado com sucesso.')
             return redirect('/auth/login')
         except:
             messages.erro(request, 'Erro interno no sistema.')
             return redirect('/auth/register')
+
+
+def copy_card(item):
+    item_copy = ItemList.objects.create(
+        author=item.author,
+        title=item.title,
+        content=item.content,
+        due_date=item.due_date,
+        discipline=item.discipline,
+        teacher=item.teacher,
+        status=item.status,
+        type=item.type
+    )
+    return item_copy
 
 
 def login(request):

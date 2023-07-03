@@ -34,7 +34,7 @@ def admin(request):
         try:
             discipline = Discipline.objects.filter(id=discipline_id).first()
             teacher = Teacher.objects.filter(id=teacher_id).first()
-            
+
             if not validation.card_id_valid(
                     request, title, content, due_date,
                     discipline, teacher, status):
@@ -113,8 +113,12 @@ def add_card_person(
         author, title, content, due_date,
         discipline, teacher, status, type='A'):
     people = Person.objects.filter(level='AL')
-    people = people.union(Person.objects.filter(level='AD'))
+    people = people.union(Person.objects.filter(level='AD')) 
     for person in people:
+        root = False
+        if author.id == person.user.id:
+            root = True
+
         item_list = ItemList.objects.create(
             author=author,
             title=title,
@@ -123,7 +127,8 @@ def add_card_person(
             discipline=discipline,
             teacher=teacher,
             status=status,
-            type=type
+            type=type,
+            root=root
         )
         item_list.save()
         person.item_list.add(item_list)

@@ -39,6 +39,7 @@ class ItemList(models.Model):
     teacher = models.ForeignKey(Teacher, models.CASCADE, blank=True, null=True)
     status = models.CharField(max_length=5, choices=STATUS)
     type = models.CharField(max_length=1, choices=TYPE)
+    root = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return self.title
