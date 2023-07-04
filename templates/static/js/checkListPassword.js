@@ -5,9 +5,9 @@ class RegisterPasswordValidation {
         this.form = document.querySelector('form.valid-form')
         this.password = this.form.querySelector('input#password')
         this.confirmPassword = this.form.querySelector('input#repeat-password')
-        this.activeCheckPassword()
         this.events()
         this.password.addEventListener('keyup', () => {
+            this.activeCheckPassword()
             this.validPassword(this.password.value)
         })
         this.confirmPassword.addEventListener('keyup', () => {
@@ -23,7 +23,7 @@ class RegisterPasswordValidation {
     }
 
     activeCheckPassword() {
-        this.password.addEventListener('click', () => {
+        this.password.addEventListener('keyup', () => {
             const checkPass = this.form.querySelector('div.check-pass')
             checkPass.classList.remove('d-none')
             checkPass.classList.add('d-block')

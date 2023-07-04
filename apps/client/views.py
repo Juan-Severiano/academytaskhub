@@ -34,28 +34,17 @@ def admin(request):
         try:
             discipline = Discipline.objects.filter(id=discipline_id).first()
             teacher = Teacher.objects.filter(id=teacher_id).first()
-            
+
             if not validation.card_id_valid(
                     request, title, content, due_date,
                     discipline, teacher, status):
                 return redirect('/client/admin/')
-            
-            item_list = ItemList.objects.create(
-                author=request.user,
-                title=title,
-                content=content,
-                due_date=due_date,
-                discipline=discipline,
-                teacher=teacher,
-                status=status,
-                type='A'
-            )
-            item_list.save()
-            messages.success(request, 'Card criado com sucesso.')
-            
-            add_card_person(item_list)
-            messages.success(request, 'Card adicionado a todos os alunos.')
 
+            add_card_person(
+                request.user, title, content, due_date,
+                discipline, teacher, status)
+            messages.success(request, 'Card criado com sucesso.')
+            messages.success(request, 'Card adicionado a todos os alunos.')
             return redirect('/client/admin')
         except:
             messages.error(request, 'Erro interno do sistema.')
@@ -63,7 +52,7 @@ def admin(request):
 
 
 @login_required(login_url='/auth/login/')
-def client(request, pk):
+def client(request , pk):
     person = Person.objects.filter(id=pk).first()
     user = Person.objects.filter(user=request.user).first()
 
@@ -120,10 +109,28 @@ def client(request, pk):
             return redirect('/client/admin')
 
 
-def add_card_person(item_list):
+def add_card_person(
+        author, title, content, due_date,
+        discipline, teacher, status, type='A'):
     people = Person.objects.filter(level='AL')
-    people = people.union(Person.objects.filter(level='AD'))
+    people = people.union(Person.objects.filter(level='AD')) 
     for person in people:
+        root = False
+        if author.id == person.user.id:
+            root = True
+
+        item_list = ItemList.objects.create(
+            author=author,
+            title=title,
+            content=content,
+            due_date=due_date,
+            discipline=discipline,
+            teacher=teacher,
+            status=status,
+            type=type,
+            root=root
+        )
+        item_list.save()
         person.item_list.add(item_list)
 
 

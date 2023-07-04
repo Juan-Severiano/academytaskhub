@@ -5,6 +5,26 @@ ul li{
 body {
     background-color: #e6e6e6;
 }
+
+body.dark-theme {
+    background-color: #26292B;
+    color: #e6e6e6!important;
+}
+
+.dark-theme h1, .dark-theme h2, .dark-theme h4, .dark-theme h3, .dark-theme p, .dark-theme .nav-link {
+    color: #e6e6e6!important;
+}
+
+.dark-theme .card,
+.dark-theme .dropdown-menu,
+.dark-theme input, .dark-theme select, .dark-theme textarea {
+    background-color: #181A1B!important;
+}
+
+.dark-theme .dropdown-menu .dropdown-item:hover {
+    background-color: #121213;
+}
+
 .section {
     min-height: 70vh;
 }
@@ -29,6 +49,11 @@ h1 {
 .card {
     border-radius: 20px!important;
     width: 350px!important;
+}
+
+.card-title {
+    display: flex;
+    justify-content: space-between;
 }
 
 /* header.d-flex {
@@ -57,16 +82,15 @@ textarea {
     cursor: pointer;
 }
 
-.bi-brightness-high {
-    color: #ffde59;
-    font-size: 20px;
-}
-
 .bi-moon-stars{
     color: #666666;
     font-size: 20px;
 }
 
+.bi-sun {
+    color: #ffde59;
+    font-size: 20px;
+}
 @media (min-width: 300px) and (max-width: 800px) {
     textarea {
         max-width: 340px;
