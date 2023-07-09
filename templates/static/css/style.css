@@ -15,6 +15,7 @@ body.dark-theme {
     color: #e6e6e6!important;
 }
 
+
 .dark-theme .card,
 .dark-theme .dropdown-menu,
 .dark-theme input, .dark-theme select, .dark-theme textarea {
@@ -91,6 +92,32 @@ textarea {
     color: #ffde59;
     font-size: 20px;
 }
+
+.message-alert {
+    position: fixed;
+    bottom: 0;
+    right: 10px;
+    max-height: 5em;
+    min-width: 15em;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.alert-success {
+    color: var(--bs-success-text-emphasis)!important;
+}
+
+/* .alert {
+    border: solid red;
+    border-radius: 20px;
+    background-color: ;
+}
+
+.success {
+    border: solid green;
+    border-radius: 20px;
+} */
 @media (min-width: 300px) and (max-width: 800px) {
     textarea {
         max-width: 340px;
