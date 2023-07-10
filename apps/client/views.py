@@ -14,7 +14,7 @@ def admin(request):
         messages.error(request, 'Você não tem permissão de acessar está página.')
         return redirect('/')
 
-    if request.method == 'GET':       
+    if request.method == 'GET':
         disciplines = Discipline.objects.all()
         teachers = Teacher.objects.all()
         status = ItemList.STATUS
@@ -60,7 +60,7 @@ def client(request , pk):
         messages.error(request, 'Você não tem permissão de acessar está página.')
         return redirect('/')
 
-    if request.method == 'GET':       
+    if request.method == 'GET':
         disciplines = Discipline.objects.all()
         teachers = Teacher.objects.all()
         status = ItemList.STATUS
@@ -172,7 +172,7 @@ def delete_card(request, pk_card, pk_person):
         card.delete()
         messages.success(request, 'Card deletado com sucesso.')
         return redirect(f'/client/cards/{person.id}')
-    
+
 
 @login_required(login_url='/auth/login')
 def update_card(request, pk_card, pk_person):
@@ -222,4 +222,3 @@ def update_card(request, pk_card, pk_person):
         except:
             messages.error(request, 'Erro interno no sistema.')
             return redirect(f'/client/update_card/{card.id}/{person.id}/')
-        
