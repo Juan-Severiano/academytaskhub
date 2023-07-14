@@ -5,7 +5,7 @@
 <section class="container section text-white d-flex justify-content-center align-items-start">
     <main class="done p-3 d-flex justify-content-center flex-column text-dark">
         <h1>Cadastrar</h1>
-        <form action="{% url 'register' %}" method="POST" class="d-flex flex-column gap-2 valid-form">{% csrf_token %}
+        <form action="{% url 'auth:register' %}" method="POST" class="d-flex flex-column gap-2 valid-form">{% csrf_token %}
             <div class="form-floating mb-3">
                 <input type="text"  class="form-control" name="username" id="username" placeholder="username">
                 <label for="username">Nome de Usuário</label>

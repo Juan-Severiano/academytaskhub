@@ -6,15 +6,15 @@ from apps.client import views
 
 class ClientFunctionTest(TestCase):
     @parameterized.expand([
-        ('client', views.client, {'pk': 1}),
-        ('admin', views.admin, {}),
-        ('cards', views.cards, {'pk': 1}),
+        ('client:client', views.client, {'pk': 1}),
+        ('client:admin', views.admin, {}),
+        ('client:cards', views.cards, {'pk': 1}),
         (
-            'delete_card', views.delete_card,
+            'client:delete_card', views.delete_card,
             {'pk_card': 1, 'pk_person': 1}
         ),
         (
-            'update_card', views.update_card,
+            'client:update_card', views.update_card,
             {'pk_card': 1, 'pk_person': 1}
         ),
     ])

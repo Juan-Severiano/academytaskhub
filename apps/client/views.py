@@ -1,18 +1,22 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from apps.client.models import Person, Discipline, Teacher, ItemList
 from django.contrib.auth.decorators import login_required
-from datetime import datetime
-from django.contrib.auth.models import User
 from apps.validation import validation
+from django.urls import reverse
+from django.utils import timezone
+from datetime import datetime
+import pytz
+from django.conf import settings
 
 
-@login_required(login_url='/auth/login')
+@login_required(login_url='/auth/login/', redirect_field_name='next')
 def admin(request):
     person = Person.objects.get(user=request.user)
     if not person.level == 'AD':
-        messages.error(request, 'Você não tem permissão de acessar está página.')
-        return redirect('/')
+        message = 'Você não tem permissão de acessar está página.'
+        messages.error(request, message)
+        return redirect(reverse('home:home'))
 
     if request.method == 'GET':
         disciplines = Discipline.objects.all()
@@ -38,27 +42,66 @@ def admin(request):
             if not validation.card_id_valid(
                     request, title, content, due_date,
                     discipline, teacher, status):
-                return redirect('/client/admin/')
+                return redirect(reverse('client:admin'))
 
             add_card_person(
                 request.user, title, content, due_date,
-                discipline, teacher, status)
-            messages.success(request, 'Card criado com sucesso.')
-            messages.success(request, 'Card adicionado a todos os alunos.')
-            return redirect('/client/admin')
-        except:
-            messages.error(request, 'Erro interno do sistema.')
-            return redirect('/client/admin')
+                discipline, teacher, status
+            )
+            message_success = (
+                'Card criado e adicionado a todos os alunos com sucesso.'
+            )
+            messages.success(request, message_success)
+            return redirect(reverse('client:admin'))
+        except Exception as e:
+            messages.error(request, f'Erro interno do sistema: {str(e)}')
+            return redirect(reverse('client:admin'))
+    else:
+        messages.error(request, 'Requisição inválida.')
+        return redirect(reverse('home:home'))
 
 
-@login_required(login_url='/auth/login/')
-def client(request , pk):
-    person = Person.objects.filter(id=pk).first()
-    user = Person.objects.filter(user=request.user).first()
+def add_card_person(
+        author, title, content, due_date,
+        discipline, teacher, status, type='A'
+):
+    people = Person.objects.filter(level='AL')
+    people = people.union(Person.objects.filter(level='AD'))
+
+    due_date_formated = datetime.strptime(due_date, "%Y-%m-%dT%H:%M")
+    fuso_horario = pytz.timezone(settings.TIME_ZONE)
+    date = due_date_formated.replace(tzinfo=pytz.utc).astimezone(fuso_horario)
+
+    for person in people:
+        root = False
+        if author.id == person.user.id:
+            root = True
+
+        item_list = ItemList.objects.create(
+            author=author,
+            title=title,
+            content=content,
+            due_date=date,
+            discipline=discipline,
+            teacher=teacher,
+            status=status,
+            type=type,
+            root=root
+        )
+        item_list.save()
+        person.item_list.add(item_list)
+
+
+@login_required(login_url='/auth/login/', redirect_field_name='next')
+def client(request, pk):
+    person = get_object_or_404(Person, id=pk)
+    user = get_object_or_404(Person, user=request.user)
+    data = {'pk': person.id}
 
     if not person.id == user.id:
-        messages.error(request, 'Você não tem permissão de acessar está página.')
-        return redirect('/')
+        message = 'Você não tem permissão de acessar está página.'
+        messages.error(request, message)
+        return redirect(reverse('home:home'))
 
     if request.method == 'GET':
         disciplines = Discipline.objects.all()
@@ -88,13 +131,19 @@ def client(request , pk):
                     request, title,
                     content, due_date,
                     discipline, teacher, status):
-                return redirect(f'/client/{person.id}/')
+                return redirect(reverse('client:client', kwargs=data))
+
+            due_date_formated = datetime.strptime(due_date, "%Y-%m-%dT%H:%M")
+            fuso_horario = pytz.timezone(settings.TIME_ZONE)
+            date = due_date_formated.replace(
+                tzinfo=pytz.utc
+            ).astimezone(fuso_horario)
 
             item_list = ItemList.objects.create(
                 author=request.user,
                 title=title,
                 content=content,
-                due_date=due_date,
+                due_date=date,
                 discipline=discipline,
                 teacher=teacher,
                 status=status,
@@ -103,52 +152,34 @@ def client(request , pk):
             item_list.save()
             person.item_list.add(item_list)
             messages.success(request, 'Card criado com sucesso.')
-            return redirect('/client/admin')
-        except:
-            messages.error(request, 'Erro interno do sistema.')
-            return redirect('/client/admin')
+            return redirect(reverse('client:client', kwargs=data))
+        except Exception as e:
+            messages.error(request, f'Erro interno do sistema: {str(e)}')
+            return redirect(reverse('client:client', kwargs=data))
+    else:
+        messages.error(request, 'Requisição inválida.')
+        return redirect(reverse('home:home'))
 
 
-def add_card_person(
-        author, title, content, due_date,
-        discipline, teacher, status, type='A'):
-    people = Person.objects.filter(level='AL')
-    people = people.union(Person.objects.filter(level='AD')) 
-    for person in people:
-        root = False
-        if author.id == person.user.id:
-            root = True
-
-        item_list = ItemList.objects.create(
-            author=author,
-            title=title,
-            content=content,
-            due_date=due_date,
-            discipline=discipline,
-            teacher=teacher,
-            status=status,
-            type=type,
-            root=root
-        )
-        item_list.save()
-        person.item_list.add(item_list)
-
-
-@login_required(login_url='/auth/login')
+@login_required(login_url='/auth/login/', redirect_field_name='next')
 def cards(request, pk):
     if request.method == 'GET':
-        person = Person.objects.filter(id=pk).first()
-        user = Person.objects.filter(user=request.user).first()
+        person = get_object_or_404(Person, id=pk)
+        user = get_object_or_404(Person, user=request.user)
 
         if not user.id == person.id:
-            messages.error(request, 'Você não tem permisão de acessar está página.')
-            return redirect('/')
+            message = 'Você não tem permissão de acessar está página.'
+            messages.error(request, message)
+            return redirect(reverse('home:home'))
 
         person = Person.objects.get(user=request.user)
-        atual_date = datetime.today().strftime("%Y-%m-%d")
-        item_list_todo = person.item_list.filter(status='TODO').order_by('due_date')
-        item_list_doing = person.item_list.filter(status='DOING').order_by('-due_date')
-        item_list_done = person.item_list.filter(status='DONE').order_by('-due_date')
+        atual_date = timezone.now().strftime("%Y-%m-%d")
+        item_list_todo = person.item_list.filter(
+            status='TODO').order_by('due_date')
+        item_list_doing = person.item_list.filter(
+            status='DOING').order_by('-due_date')
+        item_list_done = person.item_list.filter(
+            status='DONE').order_by('-due_date')
 
         return render(request, 'pages/cards.html', context={
             'atual_date': atual_date,
@@ -157,32 +188,46 @@ def cards(request, pk):
             'item_list_doing': item_list_doing,
             'person': person,
         })
+    else:
+        messages.error(request, 'Requisição inválida.')
+        return redirect(reverse('home:home'))
 
 
-@login_required(login_url='/auth/login')
+@login_required(login_url='/auth/login/', redirect_field_name='next')
 def delete_card(request, pk_card, pk_person):
     if request.method == 'GET':
-        person = Person.objects.filter(id=pk_person).first()
-        user = Person.objects.filter(user=request.user).first()
-        if not user.id == person.id:
-            messages.error(request, 'Você não tem permissão.')
-            return  redirect('/')
+        person = get_object_or_404(Person, id=pk_person)
+        user = get_object_or_404(Person, user=request.user)
 
-        card = ItemList.objects.filter(id=pk_card).first()
+        if not user.id == person.id:
+            message = 'Você não tem permissão de acessar está página.'
+            messages.error(request, message)
+            return redirect(reverse('home:home'))
+
+        card = get_object_or_404(ItemList, id=pk_card)
         card.delete()
         messages.success(request, 'Card deletado com sucesso.')
-        return redirect(f'/client/cards/{person.id}')
+        return redirect(reverse('client:cards', kwargs={'pk': person.id}))
+    else:
+        messages.error(request, 'Requisição inválida.')
+        return redirect(reverse('home:home'))
 
 
-@login_required(login_url='/auth/login')
+@login_required(login_url='/auth/login/', redirect_field_name='next')
 def update_card(request, pk_card, pk_person):
-    person = Person.objects.filter(id=pk_person).first()
-    user = Person.objects.filter(user=request.user).first()
-    card = ItemList.objects.filter(id=pk_card).first()
+    person = get_object_or_404(Person, id=pk_person)
+    user = get_object_or_404(Person, user=request.user)
+    card = get_object_or_404(ItemList, id=pk_card)
+
+    data = {
+        'pk_card': card.id,
+        'pk_person': person.id
+    }
 
     if not user.id == person.id:
-        messages.error(request, 'Você não tem permissão.')
-        return  redirect('/')
+        message = 'Você não tem permissão de acessar está página.'
+        messages.error(request, message)
+        return redirect(reverse('home:home'))
 
     if request.method == 'GET':
         disciplines = Discipline.objects.all()
@@ -204,21 +249,31 @@ def update_card(request, pk_card, pk_person):
         status = request.POST.get('status')
 
         try:
-            discipline = Discipline.objects.get(id=discipline_id)
-            teacher = Teacher.objects.get(id=teacher_id)
+            discipline = get_object_or_404(Discipline, id=discipline_id)
+            teacher = get_object_or_404(Teacher, id=teacher_id)
 
-            if not validation.card_id_valid(request, title, content, due_date, discipline, teacher, status):
-                return redirect(f'/client/update_card/{card.id}/{person.id}/')
+            if not validation.card_id_valid(
+                request, title, content, due_date, discipline, teacher, status
+            ):
+                return redirect(reverse('client:update_card', kwargs=data))
+
+            due_date_formated = datetime.strptime(due_date, "%Y-%m-%dT%H:%M")
+            fuso_horario = pytz.timezone(settings.TIME_ZONE)
+            date = due_date_formated.replace(
+                tzinfo=pytz.utc).astimezone(fuso_horario)
 
             card.title = title
             card.content = content
-            card.due_date = due_date
+            card.due_date = date
             card.discipline = discipline
             card.teacher = teacher
             card.status = status
             card.save()
             messages.success(request, 'Tarefa atualizada com sucesso.')
-            return redirect(f'/client/cards/{person.id}/')
-        except:
-            messages.error(request, 'Erro interno no sistema.')
-            return redirect(f'/client/update_card/{card.id}/{person.id}/')
+            return redirect(reverse('client:cards', kwargs={'pk': person.id}))
+        except Exception as e:
+            messages.error(request, f'Erro interno no sistema: {str(e)}')
+            return redirect(reverse('client:update_card', kwargs=data))
+    else:
+        messages.error(request, 'Requisição inválida.')
+        return redirect(reverse('home:home'))

@@ -1,26 +1,48 @@
 from django.urls import reverse
-from parameterized import parameterized
-from .base_client import AuthBaseTest
+from .base_client import ClientBaseTest
 
 
-class ClientViewStatusCodeTest(AuthBaseTest):
-    @parameterized.expand([
-        ('client', 200, {'pk': 1}),
-        ('admin', 200, {}),
-        ('cards', 200, {'pk': 1}),
-        (
-            'delete_card', 302,
-            {'pk_card': 1, 'pk_person': 1}
-        ),
-        (
-            'update_card', 200,
-            {'pk_card': 1, 'pk_person': 1}
-        ),
-    ])
-    def test_client_view_returns_status_code_expect(
-        self, url_name, status_code, data
-    ):
-        self.login_user()
-        url = reverse(url_name, kwargs=data)
+class ClientViewStatusCodeTest(ClientBaseTest):
+    def test_client_admin_view_returns_status_code_200(self):
+        self.create_discipline()
+        self.create_teacher()
+
+        url = reverse('client:admin')
         response = self.client.get(url)
-        self.assertEqual(response.status_code, status_code)
+        self.assertEqual(response.status_code, 200)
+
+    def test_client_view_returns_status_code_200(self):
+        data = {
+            'pk': self.person.id
+        }
+        url = reverse('client:client', kwargs=data)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_client_cards_view_returns_status_code_200(self):
+        data = {
+            'pk': self.person.id
+        }
+        url = reverse('client:cards', kwargs=data)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_client_delete_card_view_returns_status_code_302(self):
+        card = self.create_card()
+        data = {
+            'pk_card': card.id,
+            'pk_person': self.person.id
+        }
+        url = reverse('client:delete_card', kwargs=data)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+
+    def test_client_update_card_view_returns_status_code_302(self):
+        card = self.create_card()
+        data = {
+            'pk_card': card.id,
+            'pk_person': self.person.id
+        }
+        url = reverse('client:update_card', kwargs=data)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)

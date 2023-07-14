@@ -6,10 +6,11 @@ from apps.home import views
 
 class HomeFunctionTest(TestCase):
     @parameterized.expand([
-        ('home', views.home),
-        ('to_do', views.to_do),
-        ('doing', views.doing),
-        ('done', views.done),
+        ('home:home', views.home),
+        ('home:to_do', views.to_do),
+        ('home:doing', views.doing),
+        ('home:done', views.done),
+        ('home:terms', views.terms),
     ])
     def test_client_view_function_is_correct(self, url_name, correct_view):
         url = reverse(url_name)

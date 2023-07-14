@@ -5,9 +5,9 @@ from .base_auth import AuthBaseTest
 
 class AuthViewStatusCodeTest(AuthBaseTest):
     @parameterized.expand([
-        ('register', 200, False),
-        ('login', 200, False),
-        ('logout', 302, True),
+        ('auth:register', 200, False),
+        ('auth:login', 200, False),
+        ('auth:logout', 302, True),
     ])
     def test_auth_view_returns_status_code_expect(
         self, url_name, status_code, login_required

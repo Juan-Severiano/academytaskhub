@@ -5,29 +5,29 @@
 <section class="container section text-white d-flex justify-content-center align-items-start">
     <main class="doing p-3 d-flex justify-content-center flex-column text-dark">
         <h1>Admin</h1>
-        <form action="{% url 'update_card' card.id person.id %}" method="POST" class="d-flex flex-column gap-2">{% csrf_token %}
+        <form action="{% url 'client:update_card' card.id person.id %}" method="POST" class="d-flex flex-column gap-2">{% csrf_token %}
           <div class="form-floating">
-            <input type="text" value="{{card.title}}" class="form-control" name="title" id="title">
+            <input type="text" value="{{card.title}}" class="form-control" name="title" id="title" required>
             <label for="title">Titulo da Tarefa</label>
           </div>
-          <textarea name="content" placeholder="Conteudo" class="p-2">{{card.content}}</textarea>
+          <textarea name="content" placeholder="Conteudo" class="p-2" required>{{card.content}}</textarea>
           <div class="form-floating">
-            <input type="datetime-local" class="form-control" name="due-date" id="due-date" placeholder="Data Vencimento" value="{{ card.due_date|date:'Y-m-d'}} {{ card.due_date|time:'G:i' }}">
+            <input type="datetime-local" class="form-control" name="due-date" id="due-date" placeholder="Data Vencimento" value="{{ card.due_date|date:'Y-m-d'}} {{ card.due_date|time:'G:i' }}" required>
             <label for="due-date">Data de Entrega</label>
           </div>
-          <select name="discipline" class="form-select" aria-label=".form-select">
+          <select name="discipline" class="form-select" aria-label=".form-select" required>
             <option value="" disabled>Selecione uma disciplina</option>
             {% for discipline in disciplines %}
               <option {% if card.discipline == discipline %} select {% endif %} value="{{discipline.id}}">{{discipline.name}}</option>
             {% endfor %}
           </select>
-          <select name="teacher" class="form-select" aria-label=".form-select">
+          <select name="teacher" class="form-select" aria-label=".form-select" required>
             <option value="" disabled>Selecione um professor</option>
             {% for teacher in teachers %}
               <option {% if card.teacher == teacher %} select {% endif %} value="{{teacher.id}}">{{teacher.name}}</option>
             {% endfor %}
           </select>
-          <select name="status" class="form-select" aria-label=".form-select">
+          <select name="status" class="form-select" aria-label=".form-select" required>
             <option value="" disabled>Selecione o Estado</option>
             {% for status, status_show in card.STATUS %}
               <option {% if status == card.status %} selected {%endif%} value="{{status}}">{{status_show}}</option>

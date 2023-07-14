@@ -1,17 +1,19 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from django.contrib import messages
 from apps.client.models import ItemList
-from datetime import datetime
 from apps.client.models import Person
+from django.utils import timezone
 
 
 def home(request):
     if request.method == 'GET':
-        atual_date = datetime.today().strftime("%Y-%m-%d")
+        atual_date = timezone.now().strftime("%Y-%m-%d")
 
         if request.user.is_authenticated:
             person = Person.objects.get(user=request.user)
             item_list_todo = person.item_list.filter(
-                status='TODO').order_by('due_date')
+                status='TODO').order_by('-due_date')
             item_list_doing = person.item_list.filter(
                 status='DOING').order_by('-due_date')
             item_list_done = person.item_list.filter(
@@ -26,7 +28,7 @@ def home(request):
             })
 
         item_list_todo = ItemList.objects.filter(
-            type='A', status='TODO', root=True).order_by('due_date')
+            type='A', status='TODO', root=True).order_by('-due_date')
         item_list_doing = ItemList.objects.filter(
             type='A', status='DOING', root=True).order_by('-due_date')
         item_list_done = ItemList.objects.filter(
@@ -38,6 +40,9 @@ def home(request):
             'item_today': item_list_doing,
             'item_list_done': item_list_done,
         })
+    else:
+        messages.error(request, 'Requisição inválida.')
+        return redirect(reverse('home:home'))
 
 
 def to_do(request):
@@ -46,18 +51,24 @@ def to_do(request):
             person = Person.objects.get(user=request.user)
 
             item_list_todo = person.item_list.filter(
-                status='TODO').order_by('due_date')
+                status='TODO').order_by('-due_date')
 
-            return render(request, 'pages/to_do.html',
-                          context={
-                            'item_list_todo': item_list_todo,
-                            'person': person})
+            context = {
+                'item_list_todo': item_list_todo,
+                'person': person
+            }
+
+            return render(
+                request, 'pages/to_do.html', context=context)
 
         item_list_todo = ItemList.objects.filter(
-            type='A', status='TODO', root=True).order_by('due_date')
+            type='A', status='TODO', root=True).order_by('-due_date')
 
-        return render(request, 'pages/to_do.html',
-                      context={'item_list_todo': item_list_todo})
+        context = {'item_list_todo': item_list_todo}
+        return render(request, 'pages/to_do.html', context=context)
+    else:
+        messages.error(request, 'Requisição inválida.')
+        return redirect(reverse('home:home'))
 
 
 def doing(request):
@@ -68,15 +79,17 @@ def doing(request):
             item_list_doing = person.item_list.filter(
                 status='DOING').order_by('-due_date')
 
-            return render(request, 'pages/doing.html',
-                          context={'item_list_doing': item_list_doing,
-                                   'person': person})
+            context = {'item_list_doing': item_list_doing, 'person': person}
+            return render(request, 'pages/doing.html', context=context)
 
         item_list_doing = ItemList.objects.filter(
             type='A', status='DOING', root=True).order_by('-due_date')
 
-        return render(request, 'pages/doing.html',
-                      context={'item_list_doing': item_list_doing})
+        context = {'item_list_doing': item_list_doing}
+        return render(request, 'pages/doing.html', context=context)
+    else:
+        messages.error(request, 'Requisição inválida.')
+        return redirect(reverse('home:home'))
 
 
 def done(request):
@@ -87,16 +100,22 @@ def done(request):
             item_list_done = person.item_list.filter(
                 status='DONE').order_by('-due_date')
 
-            return render(request, 'pages/done.html',
-                          context={'item_list_done': item_list_done,
-                                   'person': person})
+            context = {'item_list_done': item_list_done, 'person': person}
+            return render(request, 'pages/done.html', context=context)
 
         item_list_done = ItemList.objects.filter(
             type='A', status='DONE', root=True).order_by('-due_date')
 
-        return render(request, 'pages/done.html',
-                      context={'item_list_done': item_list_done})
+        context = {'item_list_done': item_list_done}
+        return render(request, 'pages/done.html', context=context)
+    else:
+        messages.error(request, 'Requisição inválida.')
+        return redirect(reverse('home:home'))
 
 
 def terms(request):
+    if request.user.is_authenticated:
+        person = Person.objects.get(user=request.user)
+        return render(request, 'pages/terms.html', context={'person': person})
+
     return render(request, 'pages/terms.html')

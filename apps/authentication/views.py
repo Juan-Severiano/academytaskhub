@@ -1,17 +1,19 @@
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from apps.client.models import Person, ItemList
 from django.contrib import messages
 from apps.validation import validation
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
 
 
 def register(request):
     if request.method == 'GET':
         if request.user.is_authenticated:
-            messages.error(request, 'Não pode acessar está pagina estando logado')
-            return redirect('/')
+            message = 'Não pode acessar está pagina estando logado.'
+            messages.error(request, message)
+            return redirect(reverse('home:home'))
         return render(request, 'pages/register.html')
     elif request.method == 'POST':
         username = request.POST.get('username')
@@ -19,8 +21,10 @@ def register(request):
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm-password')
 
-        if not validation.register_is_valid(request, username, email, password, confirm_password):
-            return redirect('/auth/register')
+        if not validation.register_is_valid(
+            request, username, email, password, confirm_password
+        ):
+            return redirect(reverse('auth:register'))
 
         try:
             user = User.objects.create_user(
@@ -54,10 +58,13 @@ def register(request):
             item_copy = None
 
             messages.success(request, 'Registro realizado com sucesso.')
-            return redirect('/auth/login')
-        except:
-            messages.erro(request, 'Erro interno no sistema.')
-            return redirect('/auth/register')
+            return redirect(reverse('auth:login'))
+        except Exception as e:
+            messages.error(request, f'Erro interno no sistema: {str(e)}')
+            return redirect(reverse('auth:register'))
+    else:
+        messages.error(request, 'Requisição inválida.')
+        return redirect(reverse('auth:register'))
 
 
 def copy_card(item):
@@ -77,34 +84,48 @@ def copy_card(item):
 def login(request):
     if request.method == 'GET':
         if request.user.is_authenticated:
-            messages.error(request, 'Não pode acessar está pagina estando logado')
-            return redirect('/')
+            message = 'Não pode acessar está pagina estando logado.'
+            messages.error(request, message)
+            return redirect(reverse('home:home'))
         return render(request, 'pages/login.html')
     elif request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
 
         if not validation.login_is_valid(request, email, password):
-            return redirect('/auth/login')
-        
+            return redirect(reverse('auth:login'))
+
         try:
             username = User.objects.filter(email=email).first()
-            user = auth.authenticate(request, username=username, password=password)
+            user = auth.authenticate(
+                request, username=username, password=password
+            )
             if user is not None:
                 auth.login(request, user)
-                messages.success(request, 'Usuário logocou com sucesso')
-                return redirect('/')
+                messages.success(request, 'Usuário logou com sucesso.')
+                return redirect(reverse('home:home'))
             else:
-                messages.error(request, 'Não foi possível logar. Tente novamente.')
-                return redirect('/auth/login')
-        except:
-            messages.error(request, 'Erro interno do sistema.')
-            return redirect('/auth/login')
+                message = 'Não foi possível logar. Tente novamente.'
+                messages.error(request, message)
+                return redirect(reverse('auth:login'))
+        except Exception as e:
+            messages.error(request, f'Erro interno do sistema: {str(e)}')
+            return redirect(reverse('auth:login'))
+    else:
+        messages.error(request, 'Requisição inválida.')
+        return redirect(reverse('auth:login'))
 
 
-@login_required(login_url='/auth/login')
+@login_required(login_url='/auth/login/', redirect_field_name='next')
 def logout(request):
-    if request.method == 'GET':
-        auth.logout(request)
-        messages.success(request, 'Usuário deslogou com sucesso')
-        return redirect('/auth/login')
+    if not request.POST:
+        messages.error(request, 'Requisição de logout inválida.')
+        return redirect(reverse('home:home'))
+
+    if request.POST.get('username') != request.user.username:
+        messages.error(request, 'User logout inválido.')
+        return redirect(reverse('home:home'))
+
+    auth.logout(request)
+    messages.success(request, 'Logout realizado com sucesso.')
+    return redirect(reverse('auth:login'))
