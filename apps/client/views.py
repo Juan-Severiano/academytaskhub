@@ -23,17 +23,25 @@ def admin(request):
         teachers = Teacher.objects.all()
         status = ItemList.STATUS
 
+        data = request.session.get('admin_form_data', None)
+        if data is not None:
+            data['discipline'] = int(data.get('discipline', '-1'))
+            data['teacher'] = int(data.get('teacher', '-1'))
+
         return render(request, 'pages/admin.html', context={
             'disciplines': disciplines, 'teachers': teachers,
-            'status': status, 'person': person})
+            'status': status, 'person': person, 'data': data
+            })
 
     elif request.method == 'POST':
         title = request.POST.get('title')
         content = request.POST.get('content')
-        due_date = request.POST.get('due-date')
+        due_date = request.POST.get('due_date')
         discipline_id = request.POST.get('discipline')
         teacher_id = request.POST.get('teacher')
         status = request.POST.get('status')
+
+        request.session['admin_form_data'] = request.POST
 
         try:
             discipline = Discipline.objects.filter(id=discipline_id).first()
@@ -52,6 +60,7 @@ def admin(request):
                 'Card criado e adicionado a todos os alunos com sucesso.'
             )
             messages.success(request, message_success)
+            del (request.session['admin_form_data'])
             return redirect(reverse('client:admin'))
         except Exception as e:
             messages.error(request, f'Erro interno do sistema: {str(e)}')
@@ -108,8 +117,14 @@ def client(request, pk):
         teachers = Teacher.objects.all()
         status = ItemList.STATUS
 
+        data = request.session.get('client_form_data', None)
+        if data is not None:
+            data['discipline'] = int(data.get('discipline', '-1'))
+            data['teacher'] = int(data.get('teacher', '-1'))
+
         return render(request, 'pages/client.html',
                       context={
+                          'data': data,
                           'person': person,
                           'disciplines': disciplines,
                           'teachers': teachers,
@@ -118,10 +133,12 @@ def client(request, pk):
     elif request.method == 'POST':
         title = request.POST.get('title')
         content = request.POST.get('content')
-        due_date = request.POST.get('due-date')
+        due_date = request.POST.get('due_date')
         discipline_id = request.POST.get('discipline')
         teacher_id = request.POST.get('teacher')
         status = request.POST.get('status')
+
+        request.session['client_form_data'] = request.POST
 
         try:
             discipline = Discipline.objects.filter(id=discipline_id).first()
@@ -152,6 +169,7 @@ def client(request, pk):
             item_list.save()
             person.item_list.add(item_list)
             messages.success(request, 'Card criado com sucesso.')
+            del (request.session['client_form_data'])
             return redirect(reverse('client:client', kwargs=data))
         except Exception as e:
             messages.error(request, f'Erro interno do sistema: {str(e)}')

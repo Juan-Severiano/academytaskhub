@@ -14,12 +14,20 @@ def register(request):
             message = 'Não pode acessar está pagina estando logado.'
             messages.error(request, message)
             return redirect(reverse('home:home'))
-        return render(request, 'pages/register.html')
+
+        data = request.session.get('register_form_data', None)
+
+        return render(request, 'pages/register.html', {'data': data})
     elif request.method == 'POST':
         username = request.POST.get('username')
         email = request.POST.get('email')
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm-password')
+
+        POST = request.POST.copy()
+        POST.pop('password', None)
+        POST.pop('confirm-password', None)
+        request.session['register_form_data'] = POST
 
         if not validation.register_is_valid(
             request, username, email, password, confirm_password
@@ -58,6 +66,7 @@ def register(request):
             item_copy = None
 
             messages.success(request, 'Registro realizado com sucesso.')
+            del (request.session['register_form_data'])
             return redirect(reverse('auth:login'))
         except Exception as e:
             messages.error(request, f'Erro interno no sistema: {str(e)}')
@@ -87,10 +96,16 @@ def login(request):
             message = 'Não pode acessar está pagina estando logado.'
             messages.error(request, message)
             return redirect(reverse('home:home'))
-        return render(request, 'pages/login.html')
+
+        data = request.session.get('login_form_data', None)
+        return render(request, 'pages/login.html', {'data': data})
     elif request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
+
+        POST = request.POST.copy()
+        POST.pop('password', None)
+        request.session['login_form_data'] = POST
 
         if not validation.login_is_valid(request, email, password):
             return redirect(reverse('auth:login'))
@@ -103,6 +118,7 @@ def login(request):
             if user is not None:
                 auth.login(request, user)
                 messages.success(request, 'Usuário logou com sucesso.')
+                del (request.session['login_form_data'])
                 return redirect(reverse('home:home'))
             else:
                 message = 'Não foi possível logar. Tente novamente.'

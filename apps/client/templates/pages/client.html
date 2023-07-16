@@ -7,30 +7,42 @@
       <h1>Criar um card</h1>
       <form action="{% url 'client:client' person.id %}" method="POST" class="d-flex flex-column gap-2">{% csrf_token %}
         <div class="form-floating">
-          <input type="text" class="form-control" name="title" id="title" placeholder="ex. youremail@aluno.ce.gov.br" required>
+          <input type="text" class="form-control" name="title" id="title" placeholder="ex. youremail@aluno.ce.gov.br" value="{{ data.title }}" required>
           <label for="title">Titulo da Tarefa</label>
         </div>
-        <textarea name="content" placeholder="Conteudo da Tarefa" class="p-2" required></textarea>
+        <textarea name="content" placeholder="Conteudo da Tarefa" class="p-2" required>{{ data.content }}</textarea>
         <div class="form-floating">
-          <input type="datetime-local" class="form-control" name="due-date" id="due-date"  placeholder="Data Vencimento" required>
+          <input type="datetime-local" class="form-control" name="due_date" id="due-date"  placeholder="Data Vencimento" value="{{ data.due_date }}" required>
           <label for="due-date">Data de Entrega</label>
         </div>
         <select name="discipline" class="form-select" aria-label=".form-select" required>
           <option value="" disabled selected>Selecione uma disciplina</option>
           {% for discipline in disciplines %}
-            <option value="{{discipline.id}}">{{discipline.name}}</option>
+            {% if discipline.id == data.discipline %}
+              <option value="{{discipline.id}}" selected>{{discipline.name}}</option>
+            {% else %}
+              <option value="{{discipline.id}}">{{discipline.name}}</option>
+            {% endif %}
           {% endfor %}
         </select>
         <select name="teacher" class="form-select" aria-label=".form-select" required>
           <option value="" disabled selected>Selecione um professor</option>
           {% for teacher in teachers %}
-            <option value="{{teacher.id}}">{{teacher.name}}</option>
+            {% if teacher.id == data.teacher %}
+              <option value="{{teacher.id}}" selected>{{teacher.name}}</option>
+            {% else %}
+              <option value="{{teacher.id}}">{{teacher.name}}</option>
+            {% endif %}
           {% endfor %}
         </select>
         <select name="status" class="form-select" aria-label=".form-select" required>
           <option value="" disabled selected>Selecione o Estado</option>
           {% for status_value, status_show in status %}
-            <option value="{{status_value}}">{{status_show}}</option>
+            {% if status_value == data.status %}
+              <option value="{{status_value}}" selected>{{status_show}}</option>
+            {% else %}
+              <option value="{{status_value}}">{{status_show}}</option>
+            {% endif%}
           {% endfor %}
         </select>
         <button type="submit" class="btn btn-primary" > Enviar <i class="bi bi-send"></i></button>
