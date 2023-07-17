@@ -50,7 +50,7 @@ class ClientViewAdminTest(ClientBaseTest):
         data = {
             'title': 'Title',
             'content': 'Content',
-            'due-date': ' ',
+            'due_date': ' ',
         }
         url = reverse('client:admin')
         response = self.client.post(url, follow=True, data=data)
@@ -64,7 +64,7 @@ class ClientViewAdminTest(ClientBaseTest):
         data = {
             'title': 'Title',
             'content': 'Content',
-            'due-date': timezone.now(),
+            'due_date': timezone.now(),
             'discipline': 1,
         }
         url = reverse('client:admin')
@@ -80,7 +80,7 @@ class ClientViewAdminTest(ClientBaseTest):
         data = {
             'title': 'Title',
             'content': 'Content',
-            'due-date': timezone.now(),
+            'due_date': timezone.now(),
             'discipline': discipline.id,
             'teacher': 1,
         }
@@ -98,7 +98,7 @@ class ClientViewAdminTest(ClientBaseTest):
         data = {
             'title': 'Title',
             'content': 'Content',
-            'due-date': timezone.now(),
+            'due_date': timezone.now(),
             'discipline': discipline.id,
             'teacher': teacher.id,
             'status': ' '
@@ -118,7 +118,7 @@ class ClientViewAdminTest(ClientBaseTest):
         data = {
             'title': 'SuccessCard',
             'content': 'SuccessContent',
-            'due-date': due_date_formated,
+            'due_date': due_date_formated,
             'discipline': discipline.id,
             'teacher': teacher.id,
             'status': 'TODO'

@@ -27,7 +27,7 @@ class CLientClientTest(ClientBaseTest):
         form.find_element(By.NAME, 'title').send_keys('Title Test')
         form.find_element(By.NAME, 'content').send_keys('Content Test')
 
-        form.find_element(By.NAME, 'due-date').send_keys(
+        form.find_element(By.NAME, 'due_date').send_keys(
             (Keys.UP + Keys.RIGHT) * 6
         )
 
@@ -94,7 +94,7 @@ class CLientClientTest(ClientBaseTest):
 
     def test_client_client_empty_due_date_error_message(self):
         def callback(form):
-            due_date = form.find_element(By.NAME, 'due-date')
+            due_date = form.find_element(By.NAME, 'due_date')
             due_date.send_keys((Keys.BACKSPACE + Keys.RIGHT) * 6)
             form.submit()
 

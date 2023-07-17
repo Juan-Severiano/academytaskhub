@@ -61,7 +61,7 @@ class AuthRegisterTest(AuthBaseTest):
             username_field = form.find_element(By.NAME, 'email')
             username_field.clear()
             username_field.send_keys(' ')
-            username_field.send_keys(Keys.ENTER)
+            form.submit()
 
             message = self.browser.find_element(By.ID, 'message-alert-id').text
             url_redirect = self.live_server_url + reverse('auth:register')

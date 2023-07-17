@@ -43,27 +43,12 @@ def register(request):
             person = Person.objects.create(user=user, level='AL')
             person.save()
 
-            item_list_todo = ItemList.objects.filter(
-                type='A', status='TODO', root=True)
-            item_list_doing = ItemList.objects.filter(
-                type='A', status='DOING', root=True)
-            item_list_done = ItemList.objects.filter(
-                type='A', status='DONE', root=True)
+            item_list = ItemList.objects.filter(type='A', root=True) \
+                .select_related('author', 'discipline', 'teacher')
 
-            for item_todo in item_list_todo:
-                item_copy = copy_card(item_todo)
+            for item in item_list:
+                item_copy = copy_card(item)
                 person.item_list.add(item_copy)
-            item_copy = None
-
-            for item_doing in item_list_doing:
-                item_copy = copy_card(item_doing)
-                person.item_list.add(item_copy)
-            item_copy = None
-
-            for item_done in item_list_done:
-                item_copy = copy_card(item_done)
-                person.item_list.add(item_copy)
-            item_copy = None
 
             messages.success(request, 'Registro realizado com sucesso.')
             del (request.session['register_form_data'])

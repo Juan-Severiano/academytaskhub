@@ -192,12 +192,12 @@ def cards(request, pk):
 
         person = Person.objects.get(user=request.user)
         atual_date = timezone.now().strftime("%Y-%m-%d")
-        item_list_todo = person.item_list.filter(
-            status='TODO').order_by('due_date')
-        item_list_doing = person.item_list.filter(
-            status='DOING').order_by('-due_date')
-        item_list_done = person.item_list.filter(
-            status='DONE').order_by('-due_date')
+
+        item_list = person.item_list.order_by('-due_date') \
+            .select_related('author', 'discipline', 'teacher')
+        item_list_todo = item_list.filter(status='TODO')
+        item_list_doing = item_list.filter(status='DOING')
+        item_list_done = item_list.filter(status='DONE')
 
         return render(request, 'pages/cards.html', context={
             'atual_date': atual_date,
@@ -251,11 +251,14 @@ def update_card(request, pk_card, pk_person):
         disciplines = Discipline.objects.all()
         teachers = Teacher.objects.all()
 
+        date = card.due_date.strftime("%Y-%m-%dT%H:%M")
+
         return render(request, 'pages/update_card.html', context={
             'card': card,
             'person': person,
             'disciplines': disciplines,
             'teachers': teachers,
+            'date': date,
         })
 
     elif request.method == 'POST':
@@ -278,7 +281,8 @@ def update_card(request, pk_card, pk_person):
             due_date_formated = datetime.strptime(due_date, "%Y-%m-%dT%H:%M")
             fuso_horario = pytz.timezone(settings.TIME_ZONE)
             date = due_date_formated.replace(
-                tzinfo=pytz.utc).astimezone(fuso_horario)
+                tzinfo=pytz.utc
+            ).astimezone(fuso_horario)
 
             card.title = title
             card.content = content

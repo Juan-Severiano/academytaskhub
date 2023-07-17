@@ -99,7 +99,7 @@ class HomeViewHomeTest(HomeBaseTest):
 
         url = reverse('home:home')
         response = self.client.get(url)
-        context = response.context['item_today'].count()
+        context = response.context['item_list_doing'].count()
 
         doing = ItemList.objects.filter(
             type='A', status='DOING', root=True

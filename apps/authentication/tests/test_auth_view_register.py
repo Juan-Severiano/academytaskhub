@@ -49,8 +49,10 @@ class AuthViewRegisterTest(AuthBaseTest):
         self.create_user(email='existemail@aluno.ce.gov.br')
         url = reverse('auth:register')
         data = {
-            'username': 'User',
+            'username': 'UserEixstEmail',
             'email': 'existemail@aluno.ce.gov.br',
+            'password': 'Pass',
+            'confirm-password': 'Pass',
         }
         response = self.client.post(url, follow=True, data=data)
         content = response.content.decode('utf-8')
@@ -104,21 +106,17 @@ class AuthViewRegisterTest(AuthBaseTest):
         self.assertIn('Registro realizado com sucesso.', content)
 
     def test_auth_register_view_register_except(self):
-        self.create_user()
+        self.create_user(username='Userused')
         url = reverse('auth:register')
         data = {
-            'username': 'User',
-            'email': 'existemail@aluno.ce.gov.br',
+            'username': 'Userused',
+            'email': 'existemailll@aluno.ce.gov.br',
             'password': 'Pass',
             'confirm-password': 'Pass'
         }
         response = self.client.post(url, follow=True, data=data)
         content = response.content.decode('utf-8')
-        message = (
-            'Erro interno no sistema: UNIQUE '
-            'constraint failed: auth_user.username'
-        )
-        self.assertIn(message, content)
+        self.assertIn('Username já utilizado.', content)
 
     def test_auth_copy_card_return_correct(self):
         card = self.create_card()

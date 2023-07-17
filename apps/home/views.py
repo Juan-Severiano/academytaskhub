@@ -12,32 +12,34 @@ def home(request):
 
         if request.user.is_authenticated:
             person = Person.objects.get(user=request.user)
-            item_list_todo = person.item_list.filter(
-                status='TODO').order_by('-due_date')
-            item_list_doing = person.item_list.filter(
-                status='DOING').order_by('-due_date')
-            item_list_done = person.item_list.filter(
-                status='DONE').order_by('-due_date')
+
+            item_list = person.item_list.order_by('-due_date') \
+                .select_related('author', 'discipline', 'teacher')
+
+            item_list_todo = item_list.filter(status='TODO')
+            item_list_doing = item_list.filter(status='DOING')
+            item_list_done = item_list.filter(status='DONE')
 
             return render(request, 'pages/home.html', context={
                 'atual_date': atual_date,
                 'item_list_todo': item_list_todo,
-                'item_list_done': item_list_done,
                 'item_list_doing': item_list_doing,
+                'item_list_done': item_list_done,
                 'person': person,
             })
 
-        item_list_todo = ItemList.objects.filter(
-            type='A', status='TODO', root=True).order_by('-due_date')
-        item_list_doing = ItemList.objects.filter(
-            type='A', status='DOING', root=True).order_by('-due_date')
-        item_list_done = ItemList.objects.filter(
-            type='A', status='DONE', root=True).order_by('-due_date')
+        item_list = ItemList.objects.filter(
+            type='A', root=True).order_by('-due_date') \
+            .select_related('author', 'discipline', 'teacher')
+
+        item_list_todo = item_list.filter(status='TODO')
+        item_list_doing = item_list.filter(status='DOING')
+        item_list_done = item_list.filter(status='DONE')
 
         return render(request, 'pages/home.html', context={
             'atual_date': atual_date,
             'item_list_todo': item_list_todo,
-            'item_today': item_list_doing,
+            'item_list_doing': item_list_doing,
             'item_list_done': item_list_done,
         })
     else:
@@ -51,7 +53,8 @@ def to_do(request):
             person = Person.objects.get(user=request.user)
 
             item_list_todo = person.item_list.filter(
-                status='TODO').order_by('-due_date')
+                status='TODO').order_by('-due_date') \
+                .select_related('author', 'discipline', 'teacher')
 
             context = {
                 'item_list_todo': item_list_todo,
@@ -62,7 +65,8 @@ def to_do(request):
                 request, 'pages/to_do.html', context=context)
 
         item_list_todo = ItemList.objects.filter(
-            type='A', status='TODO', root=True).order_by('-due_date')
+            type='A', status='TODO', root=True).order_by('-due_date') \
+            .select_related('author', 'discipline', 'teacher')
 
         context = {'item_list_todo': item_list_todo}
         return render(request, 'pages/to_do.html', context=context)
@@ -77,13 +81,15 @@ def doing(request):
             person = Person.objects.get(user=request.user)
 
             item_list_doing = person.item_list.filter(
-                status='DOING').order_by('-due_date')
+                status='DOING').order_by('-due_date') \
+                .select_related('author', 'discipline', 'teacher')
 
             context = {'item_list_doing': item_list_doing, 'person': person}
             return render(request, 'pages/doing.html', context=context)
 
         item_list_doing = ItemList.objects.filter(
-            type='A', status='DOING', root=True).order_by('-due_date')
+            type='A', status='DOING', root=True).order_by('-due_date') \
+            .select_related('author', 'discipline', 'teacher')
 
         context = {'item_list_doing': item_list_doing}
         return render(request, 'pages/doing.html', context=context)
@@ -98,13 +104,15 @@ def done(request):
             person = Person.objects.get(user=request.user)
 
             item_list_done = person.item_list.filter(
-                status='DONE').order_by('-due_date')
+                status='DONE').order_by('-due_date') \
+                .select_related('author', 'discipline', 'teacher')
 
             context = {'item_list_done': item_list_done, 'person': person}
             return render(request, 'pages/done.html', context=context)
 
         item_list_done = ItemList.objects.filter(
-            type='A', status='DONE', root=True).order_by('-due_date')
+            type='A', status='DONE', root=True).order_by('-due_date') \
+            .select_related('author', 'discipline', 'teacher')
 
         context = {'item_list_done': item_list_done}
         return render(request, 'pages/done.html', context=context)

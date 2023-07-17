@@ -4,6 +4,7 @@ beautifulsoup4==4.12.2
 certifi==2023.5.7
 coverage==7.2.7
 Django==4.2.2
+django-debug-toolbar==4.1.0
 django-pytest==0.2.0
 exceptiongroup==1.1.2
 h11==0.14.0

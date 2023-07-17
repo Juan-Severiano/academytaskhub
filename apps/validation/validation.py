@@ -8,6 +8,12 @@ def username_is_valid(request: any, username: str) -> bool:
     if len(username.strip()) <= 0:
         messages.error(request, 'Prencha o campo de username.')
         return False
+
+    username_exist = User.objects.filter(username=username).exists()
+    if username_exist:
+        messages.error(request, 'Username já utilizado.')
+        return False
+
     return True
 
 

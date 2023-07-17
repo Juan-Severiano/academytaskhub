@@ -7,6 +7,8 @@ from apps.client.models import Person, Discipline, Teacher, ItemList
 from django.urls import reverse
 from selenium.webdriver.common.by import By
 from django.utils import timezone
+import pytz
+from django.conf import settings
 
 
 class ClientBaseTest(StaticLiveServerTestCase):
@@ -86,15 +88,19 @@ class ClientBaseTest(StaticLiveServerTestCase):
             teacher=None,
             title='TitleTest',
             content='Content Test',
-            due_date=timezone.now(),
+            due_date=None,
             status='TODO',
             type='P',
     ):
+
+        fuso_horario = pytz.timezone(settings.TIME_ZONE)
+        date = timezone.now().replace(tzinfo=pytz.utc).astimezone(fuso_horario)
+
         self.card = ItemList.objects.create(
             author=author,
             title=title,
             content=content,
-            due_date=due_date,
+            due_date=date,
             discipline=self.create_discipline(),
             teacher=self.create_teacher(),
             status=status,

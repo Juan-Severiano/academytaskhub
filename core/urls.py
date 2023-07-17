@@ -22,4 +22,5 @@ urlpatterns = [
     path('', include('apps.home.urls')),
     path('auth/', include('apps.authentication.urls')),
     path('client/', include('apps.client.urls')),
+    path("__debug__/", include("debug_toolbar.urls")),
 ]
