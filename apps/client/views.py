@@ -74,8 +74,12 @@ def add_card_person(
         author, title, content, due_date,
         discipline, teacher, status, type='A'
 ):
-    people = Person.objects.filter(level='AL')
-    people = people.union(Person.objects.filter(level='AD'))
+    people = Person.objects.filter(level='AL') \
+        .prefetch_related('item_list').select_related('user')
+    people = people.union(
+        Person.objects.filter(level='AD')
+        .prefetch_related('item_list').select_related('user')
+    )
 
     due_date_formated = datetime.strptime(due_date, "%Y-%m-%dT%H:%M")
     fuso_horario = pytz.timezone(settings.TIME_ZONE)
