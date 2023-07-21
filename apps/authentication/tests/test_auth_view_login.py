@@ -44,7 +44,7 @@ class AuthViewLoginTest(AuthBaseTest):
         content = response.content.decode('utf-8')
         self.assertIn('Prencha o campo de senha.', content)
 
-    def test_auth_login_view_lgoin_is_success_message_success(self):
+    def test_auth_login_view_login_is_success_message_success(self):
         email = 'login@aluno.ce.gov.br'
         password = 'Pass'
         user = self.create_user(
@@ -61,7 +61,7 @@ class AuthViewLoginTest(AuthBaseTest):
         content = response.content.decode('utf-8')
         self.assertIn('Usuário logou com sucesso.', content)
 
-    def test_auth_login_view_lgoin_is_fail_message_fail(self):
+    def test_auth_login_view_login_is_fail_message_fail(self):
         email = 'login@aluno.ce.gov.br'
         password = 'Pass'
         user = self.create_user(

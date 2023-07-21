@@ -149,6 +149,9 @@ class AuthRegisterTest(AuthBaseTest):
             message = self.browser.find_element(By.ID, 'message-alert-id').text
             url_redirect = self.live_server_url + reverse('auth:login')
 
-            self.assertEqual('Registro realizado com sucesso.', message)
+            message = (
+                'Registro realizado com sucesso. Enviamos um email para você.'
+            )
+            self.assertEqual(message, message)
             self.assertEqual(url_redirect, self.browser.current_url)
         self.form_field_test_with_callback(callback)

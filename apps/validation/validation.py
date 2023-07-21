@@ -61,7 +61,7 @@ def password_is_valid(
 
 def register_is_valid(
         request: any, username: str, email: str,
-        password: str, confirm_password: str
+        password: str, confirm_password: str,
 ) -> bool:
     if not username_is_valid(request, username):
         return False
