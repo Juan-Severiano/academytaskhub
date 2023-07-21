@@ -28,9 +28,9 @@
                 <li class="nav-item" align="center"><a class="nav-link" href="{% url 'client:admin' %}"><i class="bi bi-plus-lg"></i> Adicionar Tarefa (Admin)</a></li>
                 {% endif %}
                 <li class="nav-item" align="center"><a class="nav-link dropdown-item" href="{% url 'client:cards' person.id %}">Minhas tarefas</a></li>
-                <li class="nav-item" align="center"><a class="nav-link dropdown-item" href="{% url 'home:to_do' %}">TO DO</a></li>
-                <li class="nav-item" align="center"><a class="nav-link dropdown-item" href="{% url 'home:doing' %}">DOING</a></li>
-                <li class="nav-item" align="center"><a class="nav-link dropdown-item" href="{% url 'home:done' %}">DONE</a></li>
+                <li class="nav-item" align="center"><a class="nav-link dropdown-item" href="{% url 'home:specific_status' 'todo' %}">TO DO</a></li>
+                <li class="nav-item" align="center"><a class="nav-link dropdown-item" href="{% url 'home:specific_status' 'doing' %}">DOING</a></li>
+                <li class="nav-item" align="center"><a class="nav-link dropdown-item" href="{% url 'home:specific_status' 'done' %}">DONE</a></li>
                 <li><hr style="height: 1px; color: #888;"></li>
                 <li>
                   <form action="{% url 'auth:logout' %}" method="POST">{% csrf_token %}

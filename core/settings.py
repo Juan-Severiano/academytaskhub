@@ -56,6 +56,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -132,24 +133,38 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / 'juanseveriano/academytaskhub/static'
+STATIC_ROOT = BASE_DIR / 'static'
 STATICFILES_DIRS = BASE_DIR / 'templates/static',
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = 'media'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-MEDIA_ROOT = 'home/juanseveriano/academytaskhub/media'
-MEDIA_URL = '/media/'
+
+# Gmail Send
+EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', '')
+EMAIL_HOST = os.environ.get('EMAIL_HOST', '')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
+EMAIL_PORT = os.environ.get('EMAIL_PORT', '')
+EMAIL_USE_TLS = bool(os.environ.get('EMAIL_USE_TSL', ''))
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', '')
+
+
+# Whitenoise
+STATICFILES_STORAGES = "whitenoise.storage.CompressedManifestStaticFilesStorage"  # noqa: E501
 
 
 # Django Debug Toolbar
-INTERNAL_IPS = [
-    '127.0.0.1',
-]
+INTERNAL_IPS = ['127.0.0.1']
 
 
+# Django Rest Framework
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',  # noqa: E501
     'PAGE_SIZE': 100,
@@ -158,6 +173,8 @@ REST_FRAMEWORK = {
     ),
 }
 
+
+# JWT - Json Web Token
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
@@ -165,12 +182,3 @@ SIMPLE_JWT = {
     'SIGNING_KEY': os.environ.get('SECRET_KEY_JWT', 'INSECURE'),
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
-
-# gmail_send/settings.py
-EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', '')
-EMAIL_HOST = os.environ.get('EMAIL_HOST', '')
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
-EMAIL_PORT = os.environ.get('EMAIL_PORT', '')
-EMAIL_USE_TLS = bool(os.environ.get('EMAIL_USE_TSL', ''))
-DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', '')

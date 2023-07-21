@@ -1,9 +1,8 @@
-# TO_DO LIST
+# Academy Task Hub
 
 
- a website to organize pending work and activities in the school
- 
- you can see the final result in
+a website to organize pending work and activities in the school
 
- https://academytaskhub.pythonanywhere.com
- 
+you can see the final result in
+
+https://academytaskhub.pythonanywhere.com

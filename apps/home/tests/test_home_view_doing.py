@@ -13,9 +13,9 @@ class HomeViewDoingTest(HomeBaseTest):
                 author=self.user, status=status
             ))
 
-        url = reverse('home:doing')
+        url = reverse('home:specific_status', kwargs={'status': 'doing'})
         response = self.client.get(url)
-        context = response.context['item_list_doing'].count()
+        context = response.context['item_list'].count()
 
         person_DOING = person.item_list.filter(status='DOING').count()
 
@@ -25,7 +25,7 @@ class HomeViewDoingTest(HomeBaseTest):
         self.create_and_login()
         person = Person.objects.get(id=self.person.id)
 
-        url = reverse('home:doing')
+        url = reverse('home:specific_status', kwargs={'status': 'doing'})
         response = self.client.get(url)
         context = response.context['person']
 
@@ -37,9 +37,9 @@ class HomeViewDoingTest(HomeBaseTest):
         for status in ['DOING'] * 3:
             self.create_card(author=self.user, status=status)
 
-        url = reverse('home:doing')
+        url = reverse('home:specific_status', kwargs={'status': 'doing'})
         response = self.client.get(url)
-        context = response.context['item_list_doing'].count()
+        context = response.context['item_list'].count()
 
         doing = ItemList.objects.filter(
             type='A', status='DOING', root=True
@@ -48,7 +48,7 @@ class HomeViewDoingTest(HomeBaseTest):
         self.assertEqual(context, doing)
 
     def test_home_view_doing_invalid_request_error_message(self):
-        url = reverse('home:doing')
+        url = reverse('home:specific_status', kwargs={'status': 'doing'})
         response = self.client.put(url, follow=True)
         content = response.content.decode('utf-8')
 

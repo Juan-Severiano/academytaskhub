@@ -6,8 +6,7 @@ app_name = 'home'
 
 urlpatterns = [
     path('', views.home, name='home'),
-    path('to_do/', views.to_do, name='to_do'),
-    path('doing/', views.doing, name='doing'),
-    path('done/', views.done, name='done'),
+    path('status/<str:status>/', views.specific_status,
+         name='specific_status'),
     path('terms/', views.terms, name='terms'),
 ]

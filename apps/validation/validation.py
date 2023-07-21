@@ -1,7 +1,9 @@
+import re
+
 from django.contrib import messages
 from django.contrib.auth.models import User
+
 from apps.client.models import ItemList
-import re
 
 
 def username_is_valid(request: any, username: str) -> bool:

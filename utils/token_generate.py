@@ -27,7 +27,7 @@ def vigenere_decrypt(ciphertext, key):
 
 
 if __name__ == '__main__':
-    email = "michel.araujo1@aluno.ce.gov.br"
+    email = "email@gmail.com"
     key = "kkk"
 
     encrypted_email = vigenere_encrypt(email, key)

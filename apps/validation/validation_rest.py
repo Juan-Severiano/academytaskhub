@@ -1,8 +1,12 @@
-from collections import defaultdict
-from django.contrib.auth.models import User
-from rest_framework import serializers
-from apps.client.models import ItemList
 import re
+
+from collections import defaultdict
+
+from django.contrib.auth.models import User
+
+from rest_framework import serializers
+
+from apps.client.models import ItemList
 
 
 def username_is_valid(username: str, errors: dict) -> dict:

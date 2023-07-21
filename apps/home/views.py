@@ -1,9 +1,9 @@
-from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.contrib import messages
-from apps.client.models import ItemList
-from apps.client.models import Person
 from django.utils import timezone
+from django.contrib import messages
+from django.shortcuts import render, redirect
+
+from apps.client.models import Person, ItemList
 
 
 def home(request):
@@ -13,109 +13,50 @@ def home(request):
         if request.user.is_authenticated:
             person = Person.objects.get(user=request.user)
 
-            item_list = person.item_list.order_by('-due_date') \
-                .select_related('author', 'discipline', 'teacher')
-
-            item_list_todo = item_list.filter(status='TODO')
-            item_list_doing = item_list.filter(status='DOING')
-            item_list_done = item_list.filter(status='DONE')
+            to_do, doing, done = get_items_list(person)
 
             return render(request, 'pages/home.html', context={
-                'atual_date': atual_date,
-                'item_list_todo': item_list_todo,
-                'item_list_doing': item_list_doing,
-                'item_list_done': item_list_done,
+                'atual_date': atual_date, 'item_list_todo': to_do,
+                'item_list_doing': doing, 'item_list_done': done,
                 'person': person,
             })
 
-        item_list = ItemList.objects.filter(
-            type='A', root=True).order_by('-due_date') \
-            .select_related('author', 'discipline', 'teacher')
-
-        item_list_todo = item_list.filter(status='TODO')
-        item_list_doing = item_list.filter(status='DOING')
-        item_list_done = item_list.filter(status='DONE')
+        to_do, doing, done = get_items_list(ItemList, type='A', root=True)
 
         return render(request, 'pages/home.html', context={
-            'atual_date': atual_date,
-            'item_list_todo': item_list_todo,
-            'item_list_doing': item_list_doing,
-            'item_list_done': item_list_done,
+            'atual_date': atual_date, 'item_list_todo': to_do,
+            'item_list_doing': doing, 'item_list_done': done,
         })
     else:
         messages.error(request, 'Requisição inválida.')
         return redirect(reverse('home:home'))
 
 
-def to_do(request):
+def specific_status(request, status):
+    status = status.upper()
+    STATUS = [status[0] for status in ItemList.STATUS]
+
+    if status not in STATUS:
+        messages.error(request, 'status inválido.')
+        return redirect(reverse('home:home'))
+
     if request.method == 'GET':
         if request.user.is_authenticated:
             person = Person.objects.get(user=request.user)
-
-            item_list_todo = person.item_list.filter(
-                status='TODO').order_by('-due_date') \
-                .select_related('author', 'discipline', 'teacher')
+            item_list = get_item_list(person, status=status)
 
             context = {
-                'item_list_todo': item_list_todo,
-                'person': person
+                'item_list': item_list,
+                'person': person, 'stauts': status
             }
-
             return render(
-                request, 'pages/to_do.html', context=context)
+                request, 'pages/specific_status.html', context=context
+            )
 
-        item_list_todo = ItemList.objects.filter(
-            type='A', status='TODO', root=True).order_by('-due_date') \
-            .select_related('author', 'discipline', 'teacher')
+        item_list = get_item_list(ItemList, type='A', status=status, root=True)
 
-        context = {'item_list_todo': item_list_todo}
-        return render(request, 'pages/to_do.html', context=context)
-    else:
-        messages.error(request, 'Requisição inválida.')
-        return redirect(reverse('home:home'))
-
-
-def doing(request):
-    if request.method == 'GET':
-        if request.user.is_authenticated:
-            person = Person.objects.get(user=request.user)
-
-            item_list_doing = person.item_list.filter(
-                status='DOING').order_by('-due_date') \
-                .select_related('author', 'discipline', 'teacher')
-
-            context = {'item_list_doing': item_list_doing, 'person': person}
-            return render(request, 'pages/doing.html', context=context)
-
-        item_list_doing = ItemList.objects.filter(
-            type='A', status='DOING', root=True).order_by('-due_date') \
-            .select_related('author', 'discipline', 'teacher')
-
-        context = {'item_list_doing': item_list_doing}
-        return render(request, 'pages/doing.html', context=context)
-    else:
-        messages.error(request, 'Requisição inválida.')
-        return redirect(reverse('home:home'))
-
-
-def done(request):
-    if request.method == 'GET':
-        if request.user.is_authenticated:
-            person = Person.objects.get(user=request.user)
-
-            item_list_done = person.item_list.filter(
-                status='DONE').order_by('-due_date') \
-                .select_related('author', 'discipline', 'teacher')
-
-            context = {'item_list_done': item_list_done, 'person': person}
-            return render(request, 'pages/done.html', context=context)
-
-        item_list_done = ItemList.objects.filter(
-            type='A', status='DONE', root=True).order_by('-due_date') \
-            .select_related('author', 'discipline', 'teacher')
-
-        context = {'item_list_done': item_list_done}
-        return render(request, 'pages/done.html', context=context)
+        context = {'item_list': item_list, 'stauts': status}
+        return render(request, 'pages/specific_status.html', context=context)
     else:
         messages.error(request, 'Requisição inválida.')
         return redirect(reverse('home:home'))
@@ -127,3 +68,28 @@ def terms(request):
         return render(request, 'pages/terms.html', context={'person': person})
 
     return render(request, 'pages/terms.html')
+
+
+# Auxiliary Functions
+def get_items_list(entity, **kwargs):
+    entity = entity.objects if entity is ItemList else entity.item_list
+
+    item_list = entity.filter(**kwargs) \
+        .order_by('-due_date') \
+        .select_related('author', 'discipline', 'teacher')
+
+    to_do = item_list.filter(status='TODO')
+    doing = item_list.filter(status='DOING')
+    done = item_list.filter(status='DONE')
+
+    return to_do, doing, done
+
+
+def get_item_list(entity, **kwargs):
+    entity = entity.objects if entity is ItemList else entity.item_list
+
+    item_list = entity.filter(**kwargs) \
+        .order_by('-due_date') \
+        .select_related('author', 'discipline', 'teacher')
+
+    return item_list
