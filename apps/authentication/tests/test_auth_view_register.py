@@ -1,7 +1,8 @@
 from django.urls import reverse
-from .base_auth import AuthBaseTest
-from apps.authentication.views import copy_card
+
 from apps.client.models import Person, ItemList
+from .base_auth import AuthBaseTest
+from utils import card_generate
 
 
 class AuthViewRegisterTest(AuthBaseTest):
@@ -120,7 +121,7 @@ class AuthViewRegisterTest(AuthBaseTest):
 
     def test_auth_copy_card_return_correct(self):
         card = self.create_card()
-        card_copy = copy_card(card)
+        card_copy = card_generate.copy_card(card)
 
         self.assertEqual(card.author, card_copy.author)
         self.assertEqual(card.title, card_copy.title)

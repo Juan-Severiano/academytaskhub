@@ -1,7 +1,7 @@
+from django.contrib.auth.models import User
 from rest_framework import permissions
 from rest_framework.serializers import ValidationError
-from .serializers import send_verify_user
-from django.contrib.auth.models import User
+from utils import email_generate
 
 
 class IsOwner(permissions.BasePermission):
@@ -24,7 +24,7 @@ class IsActiveUserPermission(permissions.BasePermission):
                 'Você ainda não ativou sua conta no email. '
                 'Acabamos de lhe enviar outro'
             )
-            send_verify_user(request, user)
+            email_generate.send_verify_user(request, user)
             raise ValidationError(message)
 
         return user.is_active

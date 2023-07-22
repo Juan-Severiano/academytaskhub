@@ -5,8 +5,10 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
+from rest_framework_simplejwt.views import TokenObtainPairView
+
 from .. import serializers
-from apps.authentication.permissions import IsOwner
+from apps.authentication.permissions import IsOwner, IsActiveUserPermission
 
 
 class UserViewSets(viewsets.ModelViewSet):
@@ -26,3 +28,7 @@ class UserViewSets(viewsets.ModelViewSet):
         return super().create(
             request, *args, **kwargs, context={'request': request}
         )
+
+
+class TokenObtainPairViewIsActive(TokenObtainPairView):
+    permission_classes = [IsActiveUserPermission]

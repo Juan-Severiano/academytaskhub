@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 
 from apps.client.models import Person, ItemList
+from utils.card_generate import get_item_list, get_items_list
 
 
 def home(request):
@@ -68,28 +69,3 @@ def terms(request):
         return render(request, 'pages/terms.html', context={'person': person})
 
     return render(request, 'pages/terms.html')
-
-
-# Auxiliary Functions
-def get_items_list(entity, **kwargs):
-    entity = entity.objects if entity is ItemList else entity.item_list
-
-    item_list = entity.filter(**kwargs) \
-        .order_by('-due_date') \
-        .select_related('author', 'discipline', 'teacher')
-
-    to_do = item_list.filter(status='TODO')
-    doing = item_list.filter(status='DOING')
-    done = item_list.filter(status='DONE')
-
-    return to_do, doing, done
-
-
-def get_item_list(entity, **kwargs):
-    entity = entity.objects if entity is ItemList else entity.item_list
-
-    item_list = entity.filter(**kwargs) \
-        .order_by('-due_date') \
-        .select_related('author', 'discipline', 'teacher')
-
-    return item_list
