@@ -22,7 +22,7 @@ class IsActiveUserPermission(permissions.BasePermission):
         if not user.is_active:
             message = (
                 'Você ainda não ativou sua conta no email. '
-                'Acabamos de lhe enviar outro'
+                'Acabamos de lhe enviar outro email.'
             )
             email_generate.send_verify_user(request, user)
             raise ValidationError(message)

@@ -17,10 +17,17 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'email', 'password', 'confirm_password']
 
     def validate(self, attrs):
-        validation_rest.register_is_valid(
-            attrs.get('username', ''), attrs.get('email', ''),
-            attrs.get('password', ''), attrs.get('confirm_password', '')
-        )
+        request = self.context.get('request')
+        if request.method == 'POST':
+            validation_rest.register_is_valid(
+                attrs.get('username', ''), attrs.get('email', ''),
+                attrs.get('password', ''), attrs.get('confirm_password', '')
+            )
+        elif request.method in ['PUT', 'PATCH']:
+            validation_rest.update_is_valid(
+                attrs.get('username', ''), attrs.get('email', ''),
+                attrs.get('password', ''), attrs.get('confirm_password', '')
+            )
         return attrs
 
     def create(self, validated_data):
@@ -41,3 +48,12 @@ class UserSerializer(serializers.ModelSerializer):
             person.item_list.add(item_copy)
 
         return user
+
+    def update(self, instance, validated_data):
+        if instance.email != validated_data.get('email'):
+            instance.is_active = False
+            instance.email = validated_data.get('email')
+            email_generate.send_verify_user(
+                self.context.get('request'), instance
+            )
+        return super().update(instance, validated_data)

@@ -15,7 +15,7 @@ class UserViewSets(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = serializers.UserSerializer
     permission_classes = [IsAuthenticated, IsAdminUser]
-    http_method_names = ['get', 'options', 'head', 'post']
+    http_method_names = ['get', 'options', 'head', 'post', 'patch', 'delete']
 
     def retrieve(self, request, *args, **kwargs):
         obj = self.get_object()
@@ -26,6 +26,11 @@ class UserViewSets(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         return super().create(
+            request, *args, **kwargs, context={'request': request}
+        )
+
+    def update(self, request, *args, **kwargs):
+        return super().update(
             request, *args, **kwargs, context={'request': request}
         )
 

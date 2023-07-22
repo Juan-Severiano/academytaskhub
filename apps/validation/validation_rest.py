@@ -9,13 +9,16 @@ from rest_framework import serializers
 from apps.client.models import ItemList
 
 
-def username_is_valid(username: str, errors: dict) -> dict:
+def username_is_valid(
+        username: str, errors: dict, verify_exist: bool = True
+) -> dict:
     if len(username.strip()) <= 0:
         errors['username'].append('Prencha o campo de username.')
 
-    username_exist = User.objects.filter(username=username).exists()
-    if username_exist:
-        errors['username'].append('Username já utilizado.')
+    if verify_exist:
+        username_exist = User.objects.filter(username=username).exists()
+        if username_exist:
+            errors['username'].append('Username já utilizado.')
 
     return errors
 
@@ -41,7 +44,7 @@ def email_is_valid(
 
 
 def password_is_valid(
-        password: str, confirm_password: str = '', 
+        password: str, confirm_password: str = '',
         errors: dict = {}, verify_passwords: bool = True
 ) -> dict:
     if len(password.strip()) <= 0:
@@ -67,6 +70,19 @@ def register_is_valid(
     errors = defaultdict(list)
     username_is_valid(username, errors)
     email_is_valid(email, errors)
+    password_is_valid(password, confirm_password, errors)
+
+    if errors:
+        raise serializers.ValidationError(errors)
+
+
+def update_is_valid(
+        username: str, email: str,
+        password: str, confirm_password: str,
+) -> dict:
+    errors = defaultdict(list)
+    username_is_valid(username, errors, verify_exist=False)
+    email_is_valid(email, errors, verify_exist=False)
     password_is_valid(password, confirm_password, errors)
 
     if errors:
