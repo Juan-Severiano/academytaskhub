@@ -1,5 +1,5 @@
 # flake8: noqa
-from .api import *
+from .api_auth import *
 from .website.register import *
 from .website.login import *
 from .website.logout import *

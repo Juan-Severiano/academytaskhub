@@ -194,12 +194,11 @@ class ClientViewAdminTest(ClientBaseTest):
 
         discipline = self.create_discipline()
         teacher = self.create_teacher()
-        due_date_formated = datetime.strftime(timezone.now(), "%Y-%m-%dT%H:%M")
         data = {
             'author': self.user,
             'title': 'SuccessCard',
             'content': 'SuccessContent',
-            'due_date': due_date_formated,
+            'due_date': timezone.now(),
             'discipline': discipline,
             'teacher': teacher,
             'status': 'TODO'

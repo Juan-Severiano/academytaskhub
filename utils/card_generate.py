@@ -1,4 +1,7 @@
+from datetime import datetime
+
 from apps.client.models import ItemList
+from utils.person_generate import get_person_list
 
 
 def copy_card(item):
@@ -13,6 +16,35 @@ def copy_card(item):
         type=item.type
     )
     return item_copy
+
+
+def add_card_person(
+        author, title, content, due_date,
+        discipline, teacher, status, type='A'
+):
+    people = get_person_list(level='AL')
+    people = people.union(get_person_list(level='AD'))
+
+    due_date_formated = datetime.strftime(due_date, "%Y-%m-%dT%H:%M")
+
+    for person in people:
+        root = False
+        if author.id == person.user.id:
+            root = True
+
+        item_list = ItemList.objects.create(
+            author=author,
+            title=title,
+            content=content,
+            due_date=due_date_formated,
+            discipline=discipline,
+            teacher=teacher,
+            status=status,
+            type=type,
+            root=root
+        )
+        item_list.save()
+        person.item_list.add(item_list)
 
 
 def get_items_list(entity, **kwargs):

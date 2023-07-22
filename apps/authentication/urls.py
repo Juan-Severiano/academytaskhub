@@ -26,9 +26,9 @@ urlpatterns_jwt = [
 
 
 # Django Rest Framework
-author_api_router = SimpleRouter()
-author_api_router.register('api/user', views.UserViewSets, basename='user-api')
+auth_api_router = SimpleRouter()
+auth_api_router.register('api/user', views.UserViewSets, basename='user-api')
 
 
 urlpatterns += urlpatterns_jwt
-urlpatterns += author_api_router.urls
+urlpatterns += auth_api_router.urls
