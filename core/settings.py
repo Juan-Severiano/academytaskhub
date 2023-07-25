@@ -27,7 +27,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'INSECURE')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get('DEBUG'))
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(', ')
 
 CSRF_TRUSTED_ORIGINS = [
     'https://juan-severiano-bookish-succotash-5j9q4569vr72794r-8000.preview.app.github.dev'  # noqa: E501
@@ -120,7 +120,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = "pt-BR"
+LANGUAGE_CODE = "pt-br"
 
 TIME_ZONE = "America/Fortaleza"
 
