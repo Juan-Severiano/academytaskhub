@@ -14,25 +14,24 @@ from apps.authentication.permissions import IsOwner, IsActiveUserPermission
 class UserViewSets(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = serializers.UserSerializer
-    permission_classes = [IsAuthenticated, IsAdminUser]
     http_method_names = ['get', 'options', 'head', 'post', 'patch', 'delete']
+
+    def get_permissions(self):
+        if self.action == 'retrieve':
+            permission_classes = [IsAuthenticated, IsOwner]
+        else:
+            permission_classes = [IsAuthenticated, IsAdminUser]
+        return [permission() for permission in permission_classes]
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["request"] = self.request
+        return context
 
     def retrieve(self, request, *args, **kwargs):
         obj = self.get_object()
         serializer = self.get_serializer(instance=obj)
-        self.permission_classes.clear()
-        self.permission_classes += [IsAuthenticated, IsOwner]
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def create(self, request, *args, **kwargs):
-        return super().create(
-            request, *args, **kwargs, context={'request': request}
-        )
-
-    def update(self, request, *args, **kwargs):
-        return super().update(
-            request, *args, **kwargs, context={'request': request}
-        )
 
 
 class TokenObtainPairViewIsActive(TokenObtainPairView):

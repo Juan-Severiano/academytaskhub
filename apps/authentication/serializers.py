@@ -11,10 +11,14 @@ class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True)
     confirm_password = serializers.CharField(write_only=True, required=True)
     email = serializers.EmailField(required=True)
+    is_active = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'password', 'confirm_password']
+        fields = [
+            'id', 'username', 'email', 'password',
+            'confirm_password', 'is_active'
+        ]
 
     def validate(self, attrs):
         request = self.context.get('request')
