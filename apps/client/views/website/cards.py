@@ -103,6 +103,13 @@ def update_card(request, pk_card, pk_person):
         status = request.POST.get('status')
 
         try:
+            naive_datetime = datetime.strptime(due_date, "%Y-%m-%dT%H:%M")
+            target = pytz.timezone(settings.TIME_ZONE)
+            aware_datetime = timezone.make_aware(naive_datetime, target)
+        except (ValueError, TypeError):
+            aware_datetime = due_date
+
+        try:
             discipline = get_object_or_404(Discipline, id=discipline_id)
             teacher = get_object_or_404(Teacher, id=teacher_id)
 
@@ -111,15 +118,9 @@ def update_card(request, pk_card, pk_person):
             ):
                 return redirect(reverse('client:update_card', kwargs=data))
 
-            due_date_formated = datetime.strptime(due_date, "%Y-%m-%dT%H:%M")
-            fuso_horario = pytz.timezone(settings.TIME_ZONE)
-            date = due_date_formated.replace(
-                tzinfo=pytz.utc
-            ).astimezone(fuso_horario)
-
             card.title = title
             card.content = content
-            card.due_date = date
+            card.due_date = aware_datetime
             card.discipline = discipline
             card.teacher = teacher
             card.status = status

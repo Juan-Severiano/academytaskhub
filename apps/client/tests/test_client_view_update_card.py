@@ -2,7 +2,6 @@ from django.urls import reverse
 from .base_client import ClientBaseTest
 from apps.client.models import Discipline, Teacher
 from django.utils import timezone
-from datetime import datetime
 
 
 class ClientViewUpdateCardTest(ClientBaseTest):
@@ -201,11 +200,11 @@ class ClientViewUpdateCardTest(ClientBaseTest):
     def test_client_view_update_card_is_success_message(self):
         card = self.create_card()
         arguments = {'pk_card': card.id, 'pk_person': self.person.id}
-        date = datetime.strftime(timezone.now(), "%Y-%m-%dT%H:%M")
+        # date = datetime.strftime(timezone.now(), "%Y-%m-%dT%H:%M")
         data = {
             'title': 'SuccessCard',
             'content': 'SuccessContent',
-            'due-date': date,
+            'due-date': timezone.now(),
             'discipline': card.discipline.id,
             'teacher': card.teacher.id,
             'status': 'TODO'

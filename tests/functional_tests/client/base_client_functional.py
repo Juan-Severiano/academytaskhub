@@ -1,14 +1,14 @@
 import time
 
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
-from utils.browser import make_edge_browser
-from django.contrib.auth.models import User
-from apps.client.models import Person, Discipline, Teacher, ItemList
 from django.urls import reverse
-from selenium.webdriver.common.by import By
 from django.utils import timezone
-import pytz
-from django.conf import settings
+from django.contrib.auth.models import User
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+
+from selenium.webdriver.common.by import By
+
+from apps.client.models import Person, Discipline, Teacher, ItemList
+from utils.browser import make_edge_browser
 
 
 class ClientBaseTest(StaticLiveServerTestCase):
@@ -93,14 +93,11 @@ class ClientBaseTest(StaticLiveServerTestCase):
             type='P',
     ):
 
-        fuso_horario = pytz.timezone(settings.TIME_ZONE)
-        date = timezone.now().replace(tzinfo=pytz.utc).astimezone(fuso_horario)
-
         self.card = ItemList.objects.create(
             author=author,
             title=title,
             content=content,
-            due_date=date,
+            due_date=timezone.now(),
             discipline=self.create_discipline(),
             teacher=self.create_teacher(),
             status=status,

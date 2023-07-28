@@ -1,4 +1,5 @@
-from datetime import datetime
+# from datetime import datetime
+from django.utils.timezone import make_aware
 
 from apps.client.models import ItemList
 from utils.person_generate import get_person_list
@@ -25,7 +26,11 @@ def add_card_person(
     people = get_person_list(level='AL')
     people = people.union(get_person_list(level='AD'))
 
-    due_date_formated = datetime.strftime(due_date, "%Y-%m-%dT%H:%M")
+    # due_date_formated = datetime.strftime(due_date, "%Y-%m-%dT%H:%M")
+    try:
+        aware_datetime = make_aware(due_date)
+    except ValueError:
+        aware_datetime = due_date
 
     for person in people:
         root = False
@@ -36,7 +41,7 @@ def add_card_person(
             author=author,
             title=title,
             content=content,
-            due_date=due_date_formated,
+            due_date=aware_datetime,
             discipline=discipline,
             teacher=teacher,
             status=status,

@@ -2,7 +2,6 @@ from django.urls import reverse
 from .base_client import ClientBaseTest
 from apps.client.models import Person, ItemList, Discipline, Teacher
 from django.utils import timezone
-from datetime import datetime
 
 
 class ClientViewClientTest(ClientBaseTest):
@@ -149,12 +148,10 @@ class ClientViewClientTest(ClientBaseTest):
         discipline = self.create_discipline()
         teacher = self.create_teacher()
 
-        date = datetime.strftime(timezone.now(), "%Y-%m-%dT%H:%M")
-
         data = {
             'title': 'SuccessCard',
             'content': 'SuccessContent',
-            'due_date': date,
+            'due_date': timezone.now(),
             'discipline': discipline.id,
             'teacher': teacher.id,
             'status': 'TODO'
