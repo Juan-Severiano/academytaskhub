@@ -22,6 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         request = self.context.get('request')
+        instance = self.instance
         if request.method == 'POST':
             validation_rest.register_is_valid(
                 attrs.get('username', ''), attrs.get('email', ''),
@@ -29,7 +30,7 @@ class UserSerializer(serializers.ModelSerializer):
             )
         elif request.method in ['PUT', 'PATCH']:
             validation_rest.update_is_valid(
-                attrs.get('username', ''), attrs.get('email', ''),
+                instance, attrs.get('email', ''),
                 attrs.get('password', ''), attrs.get('confirm_password', '')
             )
         return attrs

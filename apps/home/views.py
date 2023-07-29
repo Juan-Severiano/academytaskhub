@@ -38,7 +38,7 @@ def specific_status(request, status):
     STATUS = [status[0] for status in ItemList.STATUS]
 
     if status not in STATUS:
-        messages.error(request, 'status inválido.')
+        messages.error(request, 'Status inválido.')
         return redirect(reverse('home:home'))
 
     if request.method == 'GET':

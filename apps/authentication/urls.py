@@ -29,6 +29,5 @@ urlpatterns_jwt = [
 auth_api_router = SimpleRouter()
 auth_api_router.register('api/user', views.UserViewSets, basename='user-api')
 
-
 urlpatterns += urlpatterns_jwt
 urlpatterns += auth_api_router.urls

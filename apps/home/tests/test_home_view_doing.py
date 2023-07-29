@@ -55,3 +55,12 @@ class HomeViewDoingTest(HomeBaseTest):
         redirect_url = reverse('home:home')
         self.assertIn('Requisição inválida.', content)
         self.assertEqual(redirect_url, response.wsgi_request.path)
+
+    def test_home_view_doing_invalid_status(self):
+        url = reverse('home:specific_status', kwargs={'status': 'invalid'})
+        response = self.client.put(url, follow=True)
+        content = response.content.decode('utf-8')
+
+        redirect_url = reverse('home:home')
+        self.assertIn('Status inválido.', content)
+        self.assertEqual(redirect_url, response.wsgi_request.path)

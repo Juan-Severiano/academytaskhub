@@ -24,14 +24,3 @@ def vigenere_decrypt(ciphertext, key):
             decrypted_char = char
         decrypted_text += decrypted_char
     return decrypted_text
-
-
-if __name__ == '__main__':
-    email = "email@gmail.com"
-    key = "kkk"
-
-    encrypted_email = vigenere_encrypt(email, key)
-    print("Email embaralhado:", encrypted_email)
-
-    decrypted_email = vigenere_decrypt(encrypted_email, key)
-    print("Email desembaralhado:", decrypted_email)

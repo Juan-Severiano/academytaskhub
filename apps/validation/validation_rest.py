@@ -24,9 +24,13 @@ def username_is_valid(
 
 
 def email_is_valid(
-        email: str, errors: dict, verify_exist: bool = True,
+        email: str, errors: dict, instance=None, verify_exist: bool = True,
 ) -> dict:
-    # exemple@@aluno.ce.gov.br
+    if instance is not None:
+        if email == instance.email:
+            return
+
+    # exemple@aluno.ce.gov.br
     email_pattern = r'^[a-zA-Z0-9._%+-]+@aluno\.ce\.gov\.br$'
 
     if len(email.strip()) <= 0:
@@ -77,12 +81,11 @@ def register_is_valid(
 
 
 def update_is_valid(
-        username: str, email: str,
+        instance: object, email: str,
         password: str, confirm_password: str,
 ) -> dict:
     errors = defaultdict(list)
-    username_is_valid(username, errors, verify_exist=False)
-    email_is_valid(email, errors, verify_exist=False)
+    email_is_valid(email, errors, instance)
     password_is_valid(password, confirm_password, errors)
 
     if errors:

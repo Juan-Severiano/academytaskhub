@@ -1,8 +1,6 @@
 from django.contrib.auth.models import User
 
 from rest_framework import viewsets
-from rest_framework import status
-from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -27,11 +25,6 @@ class UserViewSets(viewsets.ModelViewSet):
         context = super().get_context_data(**kwargs)
         context["request"] = self.request
         return context
-
-    def retrieve(self, request, *args, **kwargs):
-        obj = self.get_object()
-        serializer = self.get_serializer(instance=obj)
-        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class TokenObtainPairViewIsActive(TokenObtainPairView):
