@@ -33,6 +33,7 @@ CSRF_TRUSTED_ORIGINS = [
     'https://juan-severiano-bookish-succotash-5j9q4569vr72794r-8000.preview.app.github.dev'  # noqa: E501
 ]
 
+CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS', '').split(', ')
 
 # Application definition
 
@@ -43,6 +44,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # CORS Headers
+    'corsheaders',
     # Django
     'debug_toolbar',
     # Django Rest
@@ -59,6 +62,7 @@ MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
