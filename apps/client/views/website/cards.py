@@ -1,8 +1,3 @@
-import pytz
-from datetime import datetime
-
-from django.conf import settings
-from django.utils import timezone
 from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
@@ -24,7 +19,6 @@ def cards(request, pk):
             return redirect(reverse('home:home'))
 
         person = Person.objects.get(user=request.user)
-        atual_date = timezone.now().strftime("%Y-%m-%d")
 
         item_list = person.item_list.order_by('-due_date') \
             .select_related('author', 'discipline', 'teacher')
@@ -33,7 +27,6 @@ def cards(request, pk):
         item_list_done = item_list.filter(status='DONE')
 
         return render(request, 'pages/cards.html', context={
-            'atual_date': atual_date,
             'item_list_todo': item_list_todo,
             'item_list_done': item_list_done,
             'item_list_doing': item_list_doing,
@@ -84,14 +77,13 @@ def update_card(request, pk_card, pk_person):
         disciplines = Discipline.objects.all()
         teachers = Teacher.objects.all()
 
-        date = card.due_date.strftime("%Y-%m-%dT%H:%M")
+        print(card.due_date)
 
         return render(request, 'pages/update_card.html', context={
             'card': card,
             'person': person,
             'disciplines': disciplines,
             'teachers': teachers,
-            'date': date,
         })
 
     elif request.method == 'POST':
@@ -101,13 +93,6 @@ def update_card(request, pk_card, pk_person):
         discipline_id = request.POST.get('discipline')
         teacher_id = request.POST.get('teacher')
         status = request.POST.get('status')
-
-        try:
-            naive_datetime = datetime.strptime(due_date, "%Y-%m-%dT%H:%M")
-            target = pytz.timezone(settings.TIME_ZONE)
-            aware_datetime = timezone.make_aware(naive_datetime, target)
-        except (ValueError, TypeError):
-            aware_datetime = due_date
 
         try:
             discipline = get_object_or_404(Discipline, id=discipline_id)
@@ -120,7 +105,7 @@ def update_card(request, pk_card, pk_person):
 
             card.title = title
             card.content = content
-            card.due_date = aware_datetime
+            card.due_date = due_date
             card.discipline = discipline
             card.teacher = teacher
             card.status = status

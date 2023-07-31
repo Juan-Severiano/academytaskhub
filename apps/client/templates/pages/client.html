@@ -12,7 +12,7 @@
         </div>
         <textarea name="content" placeholder="Conteudo da Tarefa" class="p-2" required>{{ data.content }}</textarea>
         <div class="form-floating">
-          <input type="datetime-local" class="form-control" name="due_date" id="due-date"  placeholder="Data Vencimento" value="{{ data.due_date }}" required>
+          <input type="date" class="form-control" name="due_date" id="due-date"  placeholder="Data Vencimento" value="{{ data.due_date }}" required>
           <label for="due-date">Data de Entrega</label>
         </div>
         <select name="discipline" class="form-select" aria-label=".form-select" required>

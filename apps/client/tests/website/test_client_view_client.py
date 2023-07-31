@@ -151,7 +151,7 @@ class ClientViewClientTest(ClientBaseTest):
         data = {
             'title': 'SuccessCard',
             'content': 'SuccessContent',
-            'due_date': timezone.now(),
+            'due_date': timezone.now().strftime('%Y-%m-%d'),
             'discipline': discipline.id,
             'teacher': teacher.id,
             'status': 'TODO'

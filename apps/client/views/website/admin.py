@@ -1,7 +1,3 @@
-import pytz
-from datetime import datetime
-
-from django.conf import settings
 from django.urls import reverse
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -54,14 +50,8 @@ def admin(request):
                     discipline, teacher, status):
                 return redirect(reverse('client:admin'))
 
-            due_date_formated = datetime.strptime(due_date, "%Y-%m-%dT%H:%M")
-            fuso_horario = pytz.timezone(settings.TIME_ZONE)
-            date = due_date_formated.replace(
-                tzinfo=pytz.utc
-            ).astimezone(fuso_horario)
-
             add_card_person(
-                request.user, title, content, date,
+                request.user, title, content, due_date,
                 discipline, teacher, status
             )
             message_success = (

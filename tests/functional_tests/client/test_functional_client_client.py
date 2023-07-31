@@ -28,7 +28,7 @@ class CLientClientTest(ClientBaseTest):
         form.find_element(By.NAME, 'content').send_keys('Content Test')
 
         form.find_element(By.NAME, 'due_date').send_keys(
-            (Keys.UP + Keys.RIGHT) * 6
+            (Keys.UP + Keys.RIGHT) * 3
         )
 
         callback(form)

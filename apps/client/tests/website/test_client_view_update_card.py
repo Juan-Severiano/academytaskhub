@@ -200,11 +200,10 @@ class ClientViewUpdateCardTest(ClientBaseTest):
     def test_client_view_update_card_is_success_message(self):
         card = self.create_card()
         arguments = {'pk_card': card.id, 'pk_person': self.person.id}
-        # date = datetime.strftime(timezone.now(), "%Y-%m-%dT%H:%M")
         data = {
             'title': 'SuccessCard',
             'content': 'SuccessContent',
-            'due-date': timezone.now(),
+            'due-date': timezone.now().strftime('%Y-%m-%d'),
             'discipline': card.discipline.id,
             'teacher': card.teacher.id,
             'status': 'TODO'

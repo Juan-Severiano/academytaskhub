@@ -1,7 +1,6 @@
 from django.urls import reverse
 from ..base_client import ClientBaseTest
 from apps.client.models import Person
-from django.utils import timezone
 
 
 class ClientViewCardsTest(ClientBaseTest):
@@ -18,7 +17,9 @@ class ClientViewCardsTest(ClientBaseTest):
         url = reverse('client:cards', kwargs={'pk': person.id})
         response = self.client.get(url, follow=True)
         content = response.content.decode('utf-8')
-        self.assertIn('Você não tem permissão de acessar está página.', content)
+        self.assertIn(
+            'Você não tem permissão de acessar está página.', content
+        )
         self.assertEqual(reverse('home:home'), response.wsgi_request.path)
 
     def test_client_cards_view_returns_correct_amount_TODO_entity(self):
@@ -77,15 +78,6 @@ class ClientViewCardsTest(ClientBaseTest):
         context = response.context['person']
 
         self.assertIs(person.id, context.id)
-
-    def test_client_cards_view_returns_correct_atual_date(self):
-        date = timezone.now().strftime("%Y-%m-%d")
-
-        url = reverse('client:cards', kwargs={'pk': self.person.id})
-        response = self.client.get(url)
-        context = response.context['atual_date']
-
-        self.assertEqual(date, context)
 
     def test_client_cards_view_invalid_request_error_message(self):
         url = reverse('client:cards', kwargs={'pk': self.person.id})

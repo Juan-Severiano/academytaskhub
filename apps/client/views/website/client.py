@@ -1,9 +1,4 @@
-import pytz
-from datetime import datetime
-
-from django.conf import settings
 from django.urls import reverse
-from django.utils import timezone
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -52,13 +47,6 @@ def client(request, pk):
         request.session['client_form_data'] = request.POST
 
         try:
-            naive_datetime = datetime.strptime(due_date, "%Y-%m-%dT%H:%M")
-            target = pytz.timezone(settings.TIME_ZONE)
-            aware_datetime = timezone.make_aware(naive_datetime, target)
-        except (ValueError, TypeError):
-            aware_datetime = due_date
-
-        try:
             discipline = Discipline.objects.filter(id=discipline_id).first()
             teacher = Teacher.objects.filter(id=teacher_id).first()
 
@@ -72,7 +60,7 @@ def client(request, pk):
                 author=request.user,
                 title=title,
                 content=content,
-                due_date=aware_datetime,
+                due_date=due_date,
                 discipline=discipline,
                 teacher=teacher,
                 status=status,

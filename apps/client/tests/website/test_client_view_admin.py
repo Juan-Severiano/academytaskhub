@@ -3,7 +3,6 @@ from ..base_client import ClientBaseTest
 from apps.client.models import Person, ItemList, Discipline, Teacher
 from apps.client.views import add_card_person
 from django.utils import timezone
-from datetime import datetime
 
 
 class ClientViewAdminTest(ClientBaseTest):
@@ -114,11 +113,11 @@ class ClientViewAdminTest(ClientBaseTest):
     def test_client_view_admin_create_card_is_success_message(self):
         discipline = self.create_discipline()
         teacher = self.create_teacher()
-        due_date_formated = datetime.strftime(timezone.now(), "%Y-%m-%dT%H:%M")
+
         data = {
             'title': 'SuccessCard',
             'content': 'SuccessContent',
-            'due_date': due_date_formated,
+            'due_date': timezone.now().strftime('%Y-%m-%d'),
             'discipline': discipline.id,
             'teacher': teacher.id,
             'status': 'TODO'
