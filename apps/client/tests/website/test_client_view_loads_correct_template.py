@@ -1,33 +1,31 @@
 from django.urls import reverse
-from .base_client import ClientBaseTest
+from ..base_client import ClientBaseTest
 
 
-class ClientViewStatusCodeTest(ClientBaseTest):
-    def test_client_admin_view_returns_status_code_200(self):
+class ClientViewTemplateTest(ClientBaseTest):
+    def test_client_admin_view_loads_correct_template(self):
         self.create_discipline()
         self.create_teacher()
 
         url = reverse('client:admin')
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'pages/admin.html')
 
-    def test_client_view_returns_status_code_200(self):
-        data = {
-            'pk': self.person.id
-        }
+    def test_client_view_loads_correct_template(self):
+        data = {'pk': self.person.id}
         url = reverse('client:client', kwargs=data)
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'pages/client.html')
 
-    def test_client_cards_view_returns_status_code_200(self):
+    def test_client_cards_view_loads_correct_template(self):
         data = {
             'pk': self.person.id
         }
         url = reverse('client:cards', kwargs=data)
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'pages/cards.html')
 
-    def test_client_delete_card_view_returns_status_code_302(self):
+    def test_client_delete_card_view_loads_correct_template(self):
         card = self.create_card()
         data = {
             'pk_card': card.id,
@@ -35,9 +33,9 @@ class ClientViewStatusCodeTest(ClientBaseTest):
         }
         url = reverse('client:delete_card', kwargs=data)
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 302)
+        self.assertTemplateNotUsed(response)
 
-    def test_client_update_card_view_returns_status_code_302(self):
+    def test_client_update_card_view_loads_correct_template(self):
         card = self.create_card()
         data = {
             'pk_card': card.id,
@@ -45,4 +43,4 @@ class ClientViewStatusCodeTest(ClientBaseTest):
         }
         url = reverse('client:update_card', kwargs=data)
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'pages/update_card.html')

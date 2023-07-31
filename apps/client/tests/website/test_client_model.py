@@ -1,4 +1,4 @@
-from .base_client import ClientBaseTest
+from ..base_client import ClientBaseTest
 
 
 class ClientModelTest(ClientBaseTest):

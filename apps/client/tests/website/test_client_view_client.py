@@ -1,5 +1,5 @@
 from django.urls import reverse
-from .base_client import ClientBaseTest
+from ..base_client import ClientBaseTest
 from apps.client.models import Person, ItemList, Discipline, Teacher
 from django.utils import timezone
 
