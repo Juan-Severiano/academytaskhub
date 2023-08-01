@@ -39,6 +39,10 @@ class IsActiveUserPermission(permissions.BasePermission):
         user = User.objects.filter(
             username=request.data.get('username')
         ).first()
+        if user is None:
+            raise ValidationError({
+                'detail': 'Usuário e/ou senha incorreto(s)'
+            })
         if not user.is_active:
             message = (
                 'Você ainda não ativou sua conta no email. '
