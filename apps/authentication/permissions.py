@@ -36,12 +36,14 @@ class IsOwnerPerson(permissions.BasePermission):
 
 class IsActiveUserPermission(permissions.BasePermission):
     def has_permission(self, request, view):
-        user = User.objects.filter(
-            username=request.data.get('username')
-        ).first()
+        field = {'username': request.data.get('username')}
+        if request.query_params.get('email'):
+            field = {'email': request.data.get('username')}
+
+        user = User.objects.filter(**field).first()
         if user is None:
             raise ValidationError({
-                'detail': 'Usuário e/ou senha incorreto(s)'
+                'detail': 'Usuário e/ou senha incorreto(s) dd'
             })
         if not user.is_active:
             message = (

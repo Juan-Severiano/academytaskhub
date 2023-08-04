@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
 
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from apps.client.models import Person, ItemList
 from apps.validation import validation_rest
@@ -62,3 +64,16 @@ class UserSerializer(serializers.ModelSerializer):
                 self.context.get('request'), instance
             )
         return super().update(instance, validated_data)
+
+
+class TokenObtainPairViewIsActiveSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        request = self.context['request']
+        is_email = request.query_params.get('email', None)
+
+        if is_email:
+            email = attrs.get('username', None)
+            user = get_object_or_404(User, email=email)
+
+            attrs['username'] = user.username
+        return super().validate(attrs)

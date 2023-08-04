@@ -29,3 +29,9 @@ class UserViewSets(viewsets.ModelViewSet):
 
 class TokenObtainPairViewIsActive(TokenObtainPairView):
     permission_classes = [IsActiveUserPermission]
+    serializer_class = serializers.TokenObtainPairViewIsActiveSerializer
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["request"] = self.request
+        return context
