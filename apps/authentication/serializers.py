@@ -71,7 +71,7 @@ class TokenObtainPairViewIsActiveSerializer(TokenObtainPairSerializer):
         request = self.context['request']
         is_email = request.query_params.get('email', None)
 
-        if is_email:
+        if is_email == 'True':
             email = attrs.get('username', None)
             user = get_object_or_404(User, email=email)
 
