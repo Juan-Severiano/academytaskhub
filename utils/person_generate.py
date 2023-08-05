@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from apps.client.models import Person
 
 
@@ -10,5 +11,5 @@ def get_person_list(**kwargs):
 
 
 def get_person(**kwargs):
-    person = Person.objects.get(**kwargs)
+    person = get_object_or_404(Person, **kwargs)
     return person

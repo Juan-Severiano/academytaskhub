@@ -1,4 +1,6 @@
 from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
 from rest_framework.permissions import (
     IsAuthenticatedOrReadOnly, IsAdminUser, IsAuthenticated
 )
@@ -81,3 +83,11 @@ class PersonViewSets(viewsets.ModelViewSet):
         context = super().get_serializer_context()
         context['request'] = self.request
         return context
+
+    @action(['get'], False)
+    def me(self, request, *args, **kwargs):
+        obj = get_person(user__id=request.user.id)
+        serializers = self.get_serializer(
+            instance=obj
+        )
+        return Response(serializers.data)
