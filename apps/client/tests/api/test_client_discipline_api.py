@@ -110,7 +110,7 @@ class ClientDisciplineAPITest(test.APITestCase, ClientBaseTest):
     """
                     COMMON USER
     """
-    def test_client_discipline_api_list_return_status_code_401_forbidden(self):
+    def test_client_user_discipline_api_list_return_status_code_200_success(self):  # noqa: E501
         data_user = {'username': 'UserApi', 'password': 'Pass'}
         self.create_user(**data_user)
 
@@ -118,17 +118,18 @@ class ClientDisciplineAPITest(test.APITestCase, ClientBaseTest):
         token = f'Bearer {self.get_jwt_access(**data_user)}'
         response = self.client.get(url, HTTP_AUTHORIZATION=token)
 
-        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
 
-    def test_client_discipline_api_retrieve_return_status_code_401_forbidden(self):  # noqa: E501
+    def test_client_user_discipline_api_retrieve_return_status_code_200_success(self):  # noqa: E501
         data_user = {'username': 'UserApi', 'password': 'Pass'}
         self.create_user(**data_user)
+        discipline = self.create_discipline()
 
-        url = reverse('client:discipline-api-detail', args=(1,))
+        url = reverse('client:discipline-api-detail', args=(discipline.id,))
         token = f'Bearer {self.get_jwt_access(**data_user)}'
         response = self.client.get(url, HTTP_AUTHORIZATION=token)
 
-        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
 
     def test_client_discipline_api_post_return_status_code_401_forbidden(self):
         data_user = {'username': 'UserApi', 'password': 'Pass'}

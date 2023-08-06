@@ -14,13 +14,21 @@ from utils.person_generate import get_person_list, get_person
 class TeacherViewSets(viewsets.ModelViewSet):
     queryset = models.Teacher.objects.all()
     serializer_class = serializers.TeacherSerializer
-    permission_classes = [IsAdminUser]
+
+    def get_permissions(self):
+        if self.request.method != 'GET':
+            return [IsAdminUser()]
+        return [IsAuthenticated()]
 
 
 class DisciplineViewSets(viewsets.ModelViewSet):
     queryset = models.Discipline.objects.all()
     serializer_class = serializers.DisciplineSerializer
-    permission_classes = [IsAdminUser]
+
+    def get_permissions(self):
+        if self.request.method != 'GET':
+            return [IsAdminUser()]
+        return [IsAuthenticated()]
 
 
 class ItemListViewSets(viewsets.ModelViewSet):
