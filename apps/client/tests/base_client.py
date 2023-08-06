@@ -72,8 +72,12 @@ class ClientBaseTest(TestCase):
             status='TODO',
             type='P',
     ):
+        if author is None:
+            author_user = self.user
+        else:
+            author_user = self.create_user(**author)
         return ItemList.objects.create(
-            author=self.user,
+            author=author_user,
             title=title,
             content=content,
             due_date=due_date,

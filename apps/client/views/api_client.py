@@ -1,9 +1,8 @@
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.permissions import (
-    IsAuthenticatedOrReadOnly, IsAdminUser, IsAuthenticated
-)
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
+
 from .. import serializers
 from .. import models
 from apps.authentication.permissions import IsOwnerItemList, IsOwnerPerson
@@ -15,13 +14,13 @@ from utils.person_generate import get_person_list, get_person
 class TeacherViewSets(viewsets.ModelViewSet):
     queryset = models.Teacher.objects.all()
     serializer_class = serializers.TeacherSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly, IsAdminUser]
+    permission_classes = [IsAdminUser]
 
 
 class DisciplineViewSets(viewsets.ModelViewSet):
     queryset = models.Discipline.objects.all()
     serializer_class = serializers.DisciplineSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly, IsAdminUser]
+    permission_classes = [IsAdminUser]
 
 
 class ItemListViewSets(viewsets.ModelViewSet):
@@ -32,9 +31,10 @@ class ItemListViewSets(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         if not request.user.is_superuser:
             self.queryset = get_item_list(
-                models.ItemList, author=request.user)
+                models.ItemList, author=request.user
+            )
         else:
-            self.permission_classes += [IsAdminUser]
+            [IsAdminUser()]
         return super().list(request, *args, **kwargs)
 
     def perform_create(self, serializer):
@@ -76,9 +76,9 @@ class PersonViewSets(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         if not self.request.user.is_superuser:
-            self.queryset = get_person(author=self.request.user)
+            self.queryset = get_person_list(user=self.request.user)
         else:
-            self.permission_classes += [IsAdminUser]
+            [IsAdminUser()]
         return super().list(request, *args, **kwargs)
 
     def get_serializer_context(self):

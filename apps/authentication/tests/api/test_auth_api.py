@@ -1,8 +1,9 @@
 from parameterized import parameterized
 from django.urls import reverse
-from rest_framework import test
-from ..base_auth import AuthBaseTest
 from django.contrib.auth.models import User
+from rest_framework import test
+from rest_framework import status
+from ..base_auth import AuthBaseTest
 
 
 class AuthAPITest(test.APITestCase, AuthBaseTest):
@@ -46,7 +47,7 @@ class AuthAPITest(test.APITestCase, AuthBaseTest):
             HTTP_AUTHORIZATION=token
         )
 
-        self.assertEqual(200, response.status_code)
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
 
     def test_auth_api_admin_retrieve_return_status_code_200(self):
         data_admin = {'username': 'UserAdmin', 'password': 'PassAdmin'}
@@ -59,7 +60,7 @@ class AuthAPITest(test.APITestCase, AuthBaseTest):
         token = f'Bearer {self.get_jwt_access(**data_admin)}'
         response = self.client.get(url, HTTP_AUTHORIZATION=token)
 
-        self.assertEqual(200, response.status_code)
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
 
     @parameterized.expand([
         'username',
@@ -75,7 +76,7 @@ class AuthAPITest(test.APITestCase, AuthBaseTest):
 
         response = self.client.post(url, data={}, HTTP_AUTHORIZATION=token)
 
-        self.assertEqual(400, response.status_code)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(
             'Este campo é obrigatório.',
             response.data.get(field)[0]
@@ -96,7 +97,7 @@ class AuthAPITest(test.APITestCase, AuthBaseTest):
         data = {field: ' '}
         response = self.client.post(url, data=data, HTTP_AUTHORIZATION=token)
 
-        self.assertEqual(400, response.status_code)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(
             'Este campo não pode ser em branco.',
             response.data.get(field)[0]
@@ -111,7 +112,7 @@ class AuthAPITest(test.APITestCase, AuthBaseTest):
         data = {'username': user.username}
         response = self.client.post(url, data=data, HTTP_AUTHORIZATION=token)
 
-        self.assertEqual(400, response.status_code)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(
             'Um usuário com este nome de usuário já existe.',
             response.data.get('username')[0]
@@ -126,7 +127,7 @@ class AuthAPITest(test.APITestCase, AuthBaseTest):
         data = {'email': 'invalid'}
         response = self.client.post(url, data=data, HTTP_AUTHORIZATION=token)
 
-        self.assertEqual(400, response.status_code)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(
             'Insira um endereço de email válido.',
             response.data.get('email')[0]
@@ -142,7 +143,7 @@ class AuthAPITest(test.APITestCase, AuthBaseTest):
         data['email'] = 'ivalid@gmail.com'
         response = self.client.post(url, data=data, HTTP_AUTHORIZATION=token)
 
-        self.assertEqual(400, response.status_code)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(
             'O email precisa ser do gov.br.',
             response.data.get('email')[0]
@@ -158,7 +159,7 @@ class AuthAPITest(test.APITestCase, AuthBaseTest):
         data['email'] = user.email
         response = self.client.post(url, data=data, HTTP_AUTHORIZATION=token)
 
-        self.assertEqual(400, response.status_code)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(
             'Email já utilizado.',
             response.data.get('email')[0]
@@ -174,7 +175,7 @@ class AuthAPITest(test.APITestCase, AuthBaseTest):
         data['confirm_password'] = 'invalid'
         response = self.client.post(url, data=data, HTTP_AUTHORIZATION=token)
 
-        self.assertEqual(400, response.status_code)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(
             'As senhas não coicidem.',
             response.data.get('password')[0]
@@ -200,7 +201,7 @@ class AuthAPITest(test.APITestCase, AuthBaseTest):
         data = {field: ' '}
         response = self.client.patch(url, data=data, HTTP_AUTHORIZATION=token)
 
-        self.assertEqual(400, response.status_code)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(
             'Este campo não pode ser em branco.',
             response.data.get(field)[0]
@@ -216,7 +217,7 @@ class AuthAPITest(test.APITestCase, AuthBaseTest):
         data = {'email': 'invalid@gmail.com'}
         response = self.client.patch(url, data=data, HTTP_AUTHORIZATION=token)
 
-        self.assertEqual(400, response.status_code)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(
             'O email precisa ser do gov.br.',
             response.data.get('email')[0]
@@ -232,7 +233,7 @@ class AuthAPITest(test.APITestCase, AuthBaseTest):
         data = {}
         response = self.client.patch(url, data=data, HTTP_AUTHORIZATION=token)
 
-        self.assertEqual(400, response.status_code)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(
             'Prencha o campo de confirmar senha.',
             response.data.get('confirm_password')[0]
@@ -249,7 +250,7 @@ class AuthAPITest(test.APITestCase, AuthBaseTest):
         data['password'] = 'invalid'
         response = self.client.patch(url, data=data, HTTP_AUTHORIZATION=token)
 
-        self.assertEqual(400, response.status_code)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(
             'As senhas não coicidem.',
             response.data.get('password')[0]
@@ -273,7 +274,7 @@ class AuthAPITest(test.APITestCase, AuthBaseTest):
             HTTP_AUTHORIZATION=token
         )
 
-        self.assertEqual(200, response.status_code)
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
 
     def test_auth_api_admin_delte_return_status_code_204(self):
         data_admin = {'username': 'UserAdmin', 'password': 'PassAdmin'}
@@ -285,7 +286,7 @@ class AuthAPITest(test.APITestCase, AuthBaseTest):
         token = f'Bearer {self.get_jwt_access(**data_admin)}'
         response = self.client.delete(url, HTTP_AUTHORIZATION=token)
 
-        self.assertEqual(204, response.status_code)
+        self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
 
     """
                     COMMON USER
@@ -298,7 +299,7 @@ class AuthAPITest(test.APITestCase, AuthBaseTest):
         token = f'Bearer {self.get_jwt_access(username, password)}'
         response = self.client.get(url, HTTP_AUTHORIZATION=token)
 
-        self.assertEqual(403, response.status_code)
+        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
         self.assertEqual(
             'Você não tem permissão para executar essa ação.',
             response.data.get('detail')
@@ -312,7 +313,7 @@ class AuthAPITest(test.APITestCase, AuthBaseTest):
         token = f'Bearer {self.get_jwt_access(**data)}'
         response = self.client.get(url, HTTP_AUTHORIZATION=token)
 
-        self.assertEqual(200, response.status_code)
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
 
     def test_auth_api_user_retrieve_return_status_code_403(self):
         data = {'username': 'UserTest', 'password': 'Pass'}
@@ -325,7 +326,7 @@ class AuthAPITest(test.APITestCase, AuthBaseTest):
         token = f'Bearer {self.get_jwt_access(**data)}'
         response = self.client.get(url, HTTP_AUTHORIZATION=token)
 
-        self.assertEqual(403, response.status_code)
+        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
         self.assertEqual(
             'Você não tem permissão para executar essa ação.',
             response.data.get('detail')
@@ -339,7 +340,7 @@ class AuthAPITest(test.APITestCase, AuthBaseTest):
         token = f'Bearer {self.get_jwt_access(**data)}'
         response = self.client.post(url, HTTP_AUTHORIZATION=token)
 
-        self.assertEqual(403, response.status_code)
+        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
         self.assertEqual(
             'Você não tem permissão para executar essa ação.',
             response.data.get('detail')
@@ -353,7 +354,7 @@ class AuthAPITest(test.APITestCase, AuthBaseTest):
         token = f'Bearer {self.get_jwt_access(**data)}'
         response = self.client.patch(url, HTTP_AUTHORIZATION=token)
 
-        self.assertEqual(403, response.status_code)
+        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
         self.assertEqual(
             'Você não tem permissão para executar essa ação.',
             response.data.get('detail')
@@ -367,7 +368,7 @@ class AuthAPITest(test.APITestCase, AuthBaseTest):
         token = f'Bearer {self.get_jwt_access(**data)}'
         response = self.client.delete(url, HTTP_AUTHORIZATION=token)
 
-        self.assertEqual(403, response.status_code)
+        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
         self.assertEqual(
             'Você não tem permissão para executar essa ação.',
             response.data.get('detail')
@@ -380,19 +381,19 @@ class AuthAPITest(test.APITestCase, AuthBaseTest):
         url = reverse('auth:user-api-list')
         response = self.client.get(url)
 
-        self.assertEqual(401, response.status_code)
+        self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code)
 
     def test_auth_api_not_logged_retrieve_return_status_code_401(self):
-        url = reverse('auth:user-api-detail', args=(1, ))
+        url = reverse('auth:user-api-detail', args=(1,))
         response = self.client.get(url)
 
-        self.assertEqual(401, response.status_code)
+        self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code)
 
     def test_auth_api_not_logged_post_return_status_code_401(self):
         url = reverse('auth:user-api-list')
         response = self.client.post(url)
 
-        self.assertEqual(401, response.status_code)
+        self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code)
 
     def test_auth_api_put_return_status_code_405(self):
         self.create_superuser()
@@ -407,13 +408,13 @@ class AuthAPITest(test.APITestCase, AuthBaseTest):
         url = reverse('auth:user-api-detail', args=(1,))
         response = self.client.patch(url)
 
-        self.assertEqual(401, response.status_code)
+        self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code)
 
     def test_auth_api_not_logged_delete_return_status_code_401(self):
         url = reverse('auth:user-api-detail', args=(1,))
         response = self.client.delete(url)
 
-        self.assertEqual(401, response.status_code)
+        self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code)
 
     """
                     OTHERS

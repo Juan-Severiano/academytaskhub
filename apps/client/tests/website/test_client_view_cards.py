@@ -27,7 +27,7 @@ class ClientViewCardsTest(ClientBaseTest):
 
         for status in ['TODO'] * 3:
             person.item_list.add(self.create_card(
-                author=self.user, status=status
+                status=status
             ))
 
         url = reverse('client:cards', kwargs={'pk': self.person.id})
@@ -43,7 +43,7 @@ class ClientViewCardsTest(ClientBaseTest):
 
         for status in ['DOING'] * 3:
             person.item_list.add(self.create_card(
-                author=self.user, status=status
+                status=status
             ))
 
         url = reverse('client:cards', kwargs={'pk': self.person.id})
@@ -59,7 +59,7 @@ class ClientViewCardsTest(ClientBaseTest):
 
         for status in ['DONE'] * 3:
             person.item_list.add(self.create_card(
-                author=self.user, status=status
+                status=status
             ))
 
         url = reverse('client:cards', kwargs={'pk': self.person.id})
