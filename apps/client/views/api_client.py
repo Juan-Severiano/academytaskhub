@@ -39,6 +39,8 @@ class ItemListViewSets(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+        person = get_person(user__id=self.request.user.id)
+        person.item_list.add(serializer.instance)
 
 
 class ItemListAdminViewSets(viewsets.ModelViewSet):
