@@ -1,21 +1,21 @@
 {% load static %}
 <header class="d-flex align-items-center justify-content-between text-white header" style="min-height: 15vh;">
-  <h1 class="title" style="padding-left: 20px;"><a href="{% url 'home' %}" style="text-decoration: none;">
+  <h1 class="title" style="padding-left: 20px;"><a href="{% url 'home:home' %}" style="text-decoration: none;">
     <img id="test" src="{% static 'img/2.png' %}" alt=""> <span style="text-decoration: none; color: #e6e6e6; -webkit-text-stroke: 2px #131212;">Academy Task Hub</span> </a></h1>
   <nav class="navbar-nav">
     <ul class="nav align-items-center">
       <!-- <i class="bi "></i> -->
       <li class="nav-item p-3"><i class="bi bi-moon-stars" id="change-theme"></i></li>
       {% if not user.is_authenticated %}
-        <li class="nav-item p-3"><a class="nav-link" href="{% url 'login' %}">Login <i class="bi bi-box-arrow-in-right"></i></a></li>
-        <li class="nav-item p-3"><a class="nav-link" href="{% url 'register' %}">Cadastrar <i class="bi bi-person-add"></i></a></li>
+        <li class="nav-item p-3"><a class="nav-link" href="{% url 'auth:login' %}">Login <i class="bi bi-box-arrow-in-right"></i></a></li>
+        <li class="nav-item p-3"><a class="nav-link" href="{% url 'auth:register' %}">Cadastrar <i class="bi bi-person-add"></i></a></li>
       {% else %}
         {% if person.level == "AL" %}
-            <li class="nav-item"><a class="nav-link" href="{% url 'client' person.id %}">
+            <li class="nav-item"><a class="nav-link" href="{% url 'client:client' person.id %}">
               <i class="bi bi-plus-lg" id="asd"></i></a></li>
             <li class="nav-item dropdown">
         {% elif person.level == "AD" %}
-              <li class="nav-item"><a class="nav-link" href="{% url 'client' person.id %}">
+              <li class="nav-item"><a class="nav-link" href="{% url 'client:client' person.id %}">
                 <i class="bi bi-plus-lg" id="asd"></i></a></li>
               <li class="nav-item dropdown">
         {% endif %}
@@ -23,17 +23,22 @@
               <i class="bi bi-person-circle" id="change-mode"></i> {{ user.username }}
             </a>
             <ul class="dropdown-menu" aria-labelledby="memberDropdown" style="font-size: 13px;">
-                <li class="nav-item" align="center"><a class="nav-link" href="{% url 'client' person.id %}"><i class="bi bi-plus-lg"></i> Adicionar Tarefa</a></li>
+                <li class="nav-item" align="center"><a class="nav-link" href="{% url 'client:client' person.id %}"><i class="bi bi-plus-lg"></i> Adicionar Tarefa</a></li>
                 {% if person.level == "AD" %}
-                <li class="nav-item" align="center"><a class="nav-link" href="{% url 'admin' %}"><i class="bi bi-plus-lg"></i> Adicionar Tarefa (Admin)</a></li>
+                <li class="nav-item" align="center"><a class="nav-link" href="{% url 'client:admin' %}"><i class="bi bi-plus-lg"></i> Adicionar Tarefa (Admin)</a></li>
                 {% endif %}
-                <li class="nav-item" align="center"><a class="nav-link dropdown-item" href="{% url 'cards' person.id %}">Minhas tarefas</a></li>
-                <li class="nav-item" align="center"><a class="nav-link dropdown-item" href="{% url 'to_do' %}">TO DO</a></li>
-                <li class="nav-item" align="center"><a class="nav-link dropdown-item" href="{% url 'doing' %}">DOING</a></li>
-                <li class="nav-item" align="center"><a class="nav-link dropdown-item" href="{% url 'done' %}">DONE</a></li>
+                <li class="nav-item" align="center"><a class="nav-link dropdown-item" href="{% url 'client:cards' person.id %}">Minhas tarefas</a></li>
+                <li class="nav-item" align="center"><a class="nav-link dropdown-item" href="{% url 'home:specific_status' 'todo' %}">TO DO</a></li>
+                <li class="nav-item" align="center"><a class="nav-link dropdown-item" href="{% url 'home:specific_status' 'doing' %}">DOING</a></li>
+                <li class="nav-item" align="center"><a class="nav-link dropdown-item" href="{% url 'home:specific_status' 'done' %}">DONE</a></li>
                 <li><hr style="height: 1px; color: #888;"></li>
-                <li><a class="dropdown-item text-danger" href="{% url 'logout' %}"><i class="bi bi-box-arrow-in-left"></i>  Sair </a></li>
-            </ul>
+                <li>
+                  <form action="{% url 'auth:logout' %}" method="POST">{% csrf_token %}
+                    <input type="hidden" name="username" value="{{ request.user.username }}">
+                    <button class="dropdown-item text-danger" type="submit" style="color: red;"><i class="bi bi-box-arrow-in-left"></i>  Sair </button>
+                  </form>
+                </li>
+              </ul>
       {% endif %}
       </li>
     </ul>

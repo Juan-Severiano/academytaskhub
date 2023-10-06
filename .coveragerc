@@ -1,0 +1,3 @@
+[run]
+branch = True
+omit = venv/*,**/*test*.py,manage.py,__localcode/*,apps/validation/validation*.py,base_*_functional.py,utils/browser.py,apps/authentication/permissions.py

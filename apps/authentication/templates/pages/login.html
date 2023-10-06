@@ -5,13 +5,13 @@
 <section class="container section text-white d-flex justify-content-center align-items-start">
     <main class="p-3 d-flex justify-content-center flex-column text-dark">
         <h1 class="mt-3 mb-4">Login</h1>
-        <form action="{% url 'login' %}" method="POST" class="d-flex flex-column gap-2">{% csrf_token %}
+        <form action="{% url 'auth:login' %}" method="POST" class="d-flex flex-column gap-2">{% csrf_token %}
             <div class="form-floating mb-3">
-                <input type="email" class="form-control" name="email" id="email" placeholder="ex. youremail@aluno.ce.gov.br">
+                <input type="email" class="form-control" name="email" id="email" placeholder="ex. youremail@aluno.ce.gov.br" value="{{ data.email }}" required>
                 <label for="email">Email Institucional</label>
             </div>
             <div class="form-floating mb-3">
-                <input type="password" class="form-control mb-5" name="password" id="password" placeholder="type your password here">
+                <input type="password" class="form-control mb-5" name="password" id="password" placeholder="type your password here" required>
                 <label for="password">Senha</label>
             </div>
             <button type="submit" class="btn btn-primary" > Enviar <i class="bi bi-send"></i></button>

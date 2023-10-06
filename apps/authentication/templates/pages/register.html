@@ -5,21 +5,21 @@
 <section class="container section text-white d-flex justify-content-center align-items-start">
     <main class="done p-3 d-flex justify-content-center flex-column text-dark">
         <h1>Cadastrar</h1>
-        <form action="{% url 'register' %}" method="POST" class="d-flex flex-column gap-2 valid-form">{% csrf_token %}
+        <form action="{% url 'auth:register' %}" method="POST" class="d-flex flex-column gap-2 valid-form">{% csrf_token %}
             <div class="form-floating mb-3">
-                <input type="text"  class="form-control" name="username" id="username" placeholder="username">
+                <input type="text"  class="form-control" name="username" id="username" placeholder="username" value="{{ data.username }}" required>
                 <label for="username">Nome de Usuário</label>
             </div>
             <div class="form-floating mb-3">
-                <input type="email" class="form-control" name="email" id="email" placeholder="ex. youremail@aluno.ce.gov.br">
+                <input type="email" class="form-control" name="email" id="email" placeholder="ex. youremail@aluno.ce.gov.br" value="{{ data.email }}" required>
                 <label for="email">Email Institucional</label>
             </div>
             <div class="form-floating mb-3">
-                <input type="password" class="form-control" name="password" id="password" placeholder="type your password here">
+                <input type="password" class="form-control" name="password" id="password" placeholder="type your password here" required>
                 <label for="password">Senha</label>
             </div>
             <div class="form-floating mb-3">
-                <input type="password" name="confirm-password" id="repeat-password" placeholder="confirm your password" class="form-control">
+                <input type="password" name="confirm-password" id="repeat-password" placeholder="confirm your password" class="form-control" required>
                 <label for="repeat-password">Confirmar Senha</label>
             </div>
             <div class="form-group check-pass d-none" style="font-size: 12px;" align="center">

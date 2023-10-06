@@ -11,9 +11,9 @@ class Teacher(models.Model):
 
 class Discipline(models.Model):
     name = models.CharField(max_length=20)
-    is_technical_area = models.BooleanField()
+    is_technical_area = models.BooleanField(default=False)
 
-    def __str__ (self) -> str:
+    def __str__(self) -> str:
         return self.name
 
 
@@ -34,8 +34,9 @@ class ItemList(models.Model):
     content = models.CharField(max_length=150)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
-    due_date = models.DateTimeField()
-    discipline = models.ForeignKey(Discipline, on_delete=models.CASCADE, blank=True, null=True)
+    due_date = models.DateField()
+    discipline = models.ForeignKey(
+        Discipline, on_delete=models.CASCADE, blank=True, null=True)
     teacher = models.ForeignKey(Teacher, models.CASCADE, blank=True, null=True)
     status = models.CharField(max_length=5, choices=STATUS)
     type = models.CharField(max_length=1, choices=TYPE)
@@ -51,7 +52,7 @@ class Person(models.Model):
         ('PR', 'Professor'),
         ('AL', 'Aluno')
     )
-    
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     level = models.CharField(max_length=2, choices=LEVEL)
     item_list = models.ManyToManyField(ItemList, blank=True)
